@@ -1,6 +1,7 @@
 package backend.model;
 
 import javafx.scene.canvas.GraphicsContext;
+import javafx.scene.paint.Color;
 
 public class Circle extends Figure {
 
@@ -44,11 +45,14 @@ public class Circle extends Figure {
     }
 
     @Override
-    public GraphicsContext setStrokeAndFill(GraphicsContext gc) {
+    public GraphicsContext setStrokeAndFill(GraphicsContext gc, Color fillColor, Color strokeColor) {
+        gc.setStroke(strokeColor);
+        gc.setFill(fillColor);
         gc.fillOval(getWidth(),getHeight(),getDiameter(),getDiameter());
         gc.strokeOval(getWidth(),getHeight(),getDiameter(),getDiameter());
         return gc;
     }
+
 
     @Override
     public void moveFigure(double diffX, double diffY) {

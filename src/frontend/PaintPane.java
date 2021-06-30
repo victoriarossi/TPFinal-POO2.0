@@ -2,6 +2,8 @@ package frontend;
 
 import backend.CanvasState;
 import backend.model.*;
+import javafx.event.ActionEvent;
+import javafx.event.EventHandler;
 import javafx.geometry.Insets;
 import javafx.scene.Cursor;
 import javafx.scene.canvas.Canvas;
@@ -19,8 +21,8 @@ public class PaintPane extends BorderPane {
 	// Canvas y relacionados
 	Canvas canvas = new Canvas(800, 600);
 	GraphicsContext gc = canvas.getGraphicsContext2D();
-	Color lineColor = Color.BLACK;
-	Color fillColor = Color.YELLOW;
+	private static Color lineColor = Color.BLACK;
+	private static Color fillColor = Color.YELLOW;
 
 	// Botones Barra Izquierda
 	ToggleButton selectionButton = new ToggleButton("Seleccionar");
@@ -73,20 +75,24 @@ public class PaintPane extends BorderPane {
 		});
 		canvas.setOnMouseReleased(event -> {
 			Point endPoint = new Point(event.getX(), event.getY());
-			if (endPoint.validatePoint(startPoint)) {
-				Figure newFigure;
-				//Queda horrible, hay que cambiarlo. Funciona para todos menos la linea
+			Figure newFigure=null;
+			if (!lineButton.isSelected() && endPoint.validatePoint(startPoint)) {
+				//Queda horrible, hay que cambiarlo. Funciona para todos
 				if (rectangleButton.isSelected()) {
 					newFigure = new Rectangle(startPoint, endPoint);
 				} else if (circleButton.isSelected()) {
 					newFigure = new Circle(startPoint, endPoint);
-				} else if (lineButton.isSelected()){ //Agregar elipse, linea y cuadrado
-					newFigure = new Line(startPoint, endPoint);
-				}else {
-					return ;
+				} else if (squareButton.isSelected()){
+					newFigure = new Square(startPoint, endPoint);
+				}else if (ellipseButton.isSelected()){
+					newFigure = new Ellipse(startPoint, endPoint);
+				}else{
+					return;
 				}
-				canvasState.addFigure(newFigure);
+			} else if(lineButton.isSelected()){
+				newFigure = new Line(startPoint, endPoint);
 			}
+			canvasState.addFigure(newFigure);
 			startPoint = null;
 			redrawCanvas();
 		});
@@ -117,6 +123,7 @@ public class PaintPane extends BorderPane {
 		});
 		setLeft(buttonsBox);
 		setRight(canvas);
+		//setStrokeAndLine();
 	}
 
 	private void checkingFigureBelongs(Point eventPoint , StringBuilder label, String elseString){
@@ -144,7 +151,22 @@ public class PaintPane extends BorderPane {
 				gc.setStroke(lineColor);
 			}
 			gc.setFill(fillColor);
-			gc = figure.setStrokeAndFill(gc);
+			gc = figure.setStrokeAndFill(gc,colorPickerFill.getValue(),colorPickerThick.getValue());
 		}
 	}
+//	private void setStrokeAndLine(){
+//			colorPickerThick.setOnAction(new EventHandler<ActionEvent>() {
+//				@Override
+//				public void handle(ActionEvent actionEvent) {
+//					lineColor = colorPickerThick.getValue();
+//				}
+//			});
+//			colorPickerFill.setOnAction(new EventHandler<ActionEvent>() {
+//				@Override
+//				public void handle(ActionEvent actionEvent) {
+//					fillColor = colorPickerFill.getValue();
+//				}
+//			});
+//		}
+//	}
 }

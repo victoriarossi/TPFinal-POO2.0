@@ -1,6 +1,7 @@
 package backend.model;
 
 import javafx.scene.canvas.GraphicsContext;
+import javafx.scene.paint.Color;
 
 public class Rectangle extends Figure {
 
@@ -40,7 +41,9 @@ public class Rectangle extends Figure {
     }
 
     @Override
-    public GraphicsContext setStrokeAndFill(GraphicsContext gc) {
+    public GraphicsContext setStrokeAndFill(GraphicsContext gc, Color fillColor, Color strokeColor) {
+        gc.setStroke(strokeColor);
+        gc.setFill(fillColor);
         gc.fillRect(topLeft.getX(), topLeft.getY(), getWidth(),getHeight());
         gc.strokeRect(topLeft.getX(), topLeft.getY(), getWidth(),getHeight());
         return gc;
