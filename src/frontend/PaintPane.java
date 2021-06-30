@@ -1,10 +1,7 @@
 package frontend;
 
 import backend.CanvasState;
-import backend.model.Circle;
-import backend.model.Figure;
-import backend.model.Point;
-import backend.model.Rectangle;
+import backend.model.*;
 import javafx.geometry.Insets;
 import javafx.scene.Cursor;
 import javafx.scene.canvas.Canvas;
@@ -65,12 +62,15 @@ public class PaintPane extends BorderPane {
 			Point endPoint = new Point(event.getX(), event.getY());
 			if (endPoint.validatePoint(startPoint)) {
 				Figure newFigure;
+				//Queda horrible, hay que cambiarlo. Funciona para todos menos la linea
 				if (rectangleButton.isSelected()) {
 					newFigure = new Rectangle(startPoint, endPoint);
 				} else if (circleButton.isSelected()) {
 					newFigure = new Circle(startPoint, endPoint);
-				} else { //Agregar elipse, linea y cuadrado
-					return;
+				} else if (lineButton.isSelected()){ //Agregar elipse, linea y cuadrado
+					newFigure = new Line(startPoint, endPoint);
+				}else {
+					return ;
 				}
 				canvasState.addFigure(newFigure);
 			}
@@ -131,22 +131,7 @@ public class PaintPane extends BorderPane {
 				gc.setStroke(lineColor);
 			}
 			gc.setFill(fillColor);
-			if (figure instanceof Rectangle) {
-				Rectangle rectangle = (Rectangle) figure;
-				double width = rectangle.getWidth();
-				double height = rectangle.getHeight();
-				double x = rectangle.getTopLeft().getX();
-				double y= rectangle.getTopLeft().getY();
-				gc.fillRect(x,y,width, height);
-				gc.strokeRect(x, y, width, height);
-			} else if (figure instanceof Circle) {
-				Circle circle = (Circle) figure;
-				double diameter = circle.getDiameter();
-				double width = circle.getWidth();
-				double height = circle.getHeight();
-				gc.fillOval(width, height, diameter, diameter);
-				gc.strokeOval(width, height, diameter, diameter);
-			}
+			gc = figure.setStrokeAndFill(gc);
 		}
 	}
 }

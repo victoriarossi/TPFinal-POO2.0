@@ -1,5 +1,7 @@
 package backend.model;
 
+import javafx.scene.canvas.GraphicsContext;
+
 //Para dibujar una elipse se tomará al punto inicial (del click) como esquina superior izquierda
 //        del rectángulo que encierra a la elipse y al punto final como esquina inferior derecha del rectángulo
 //        que encierra a la elipse.
@@ -39,4 +41,10 @@ public class Ellipse extends Rectangle{
         getCenter().movePoint(diffX,diffY);
     }
 
+    @Override
+    public GraphicsContext setStrokeAndFill(GraphicsContext gc) {
+        gc.fillOval(getWidth(),getHeight(),getAxisMay(),getAxisMen());
+        gc.strokeOval(getWidth(),getHeight(),getAxisMay(),getAxisMen());
+        return gc;
+    }
 }
