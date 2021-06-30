@@ -32,7 +32,7 @@ public class PaintPane extends BorderPane {
 	ToggleButton circleButton = new ToggleButton("Círculo");
 	ToggleButton ellipseButton = new ToggleButton("Elipse");
 	ToggleButton squareButton = new ToggleButton("Cuadrado");
-	ToggleButton lineButton = new ToggleButton("Line");
+	ToggleButton lineButton = new ToggleButton("Linea");
 	// Dibujar una figura
 	Point startPoint;
 
