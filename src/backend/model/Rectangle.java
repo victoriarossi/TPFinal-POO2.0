@@ -17,14 +17,24 @@ public class Rectangle extends Figure {
         return bottomRight;
     }
 
+    public Point getCenter(){
+        return new Point(getWidth() / 2 , getHeight() / 2);
+    }
+
     @Override
     public double getWidth(){
-        return Math.abs(topLeft.x - bottomRight.x);
+        return Math.abs(topLeft.getX() - bottomRight.getX());
     }
 
     @Override
     public double getHeight(){
-        return Math.abs(topLeft.y - bottomRight.y);
+        return Math.abs(topLeft.getY() - bottomRight.getY());
+    }
+
+    @Override
+    public boolean figureBelongs(Point eventPoint) {
+        return eventPoint.getX() > topLeft.getX() && eventPoint.getX() < bottomRight.getX() &&
+                eventPoint.getY() > topLeft.getY() && eventPoint.getY() < bottomRight.getY();
     }
 
     @Override

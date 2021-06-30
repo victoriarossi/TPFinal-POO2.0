@@ -27,12 +27,18 @@ public class Circle extends Figure {
 
     @Override
     public double getWidth(){
-        return centerPoint.x - radius;
+        return centerPoint.getX() - radius;
     }
 
     @Override
     public double getHeight(){
-        return centerPoint.y - radius;
+        return centerPoint.getY() - radius;
+    }
+
+    @Override
+    public boolean figureBelongs(Point eventPoint) {
+        return Math.sqrt(Math.pow(centerPoint.getX() - eventPoint.getX(), 2) +
+                Math.pow(centerPoint.getY() - eventPoint.getY(), 2)) < radius;
     }
 
     @Override
