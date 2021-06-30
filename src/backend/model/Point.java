@@ -9,6 +9,10 @@ public class Point {
         this.y = y;
     }
 
+    public void movePoint(double diffX, double diffY){
+        x+=diffX;
+        y+=diffY;
+    }
     public double getX() {
         return x;
     }

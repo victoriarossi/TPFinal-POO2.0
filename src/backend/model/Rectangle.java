@@ -18,8 +18,23 @@ public class Rectangle extends Figure {
     }
 
     @Override
+    public double getWidth(){
+        return Math.abs(topLeft.x - bottomRight.x);
+    }
+
+    @Override
+    public double getHeight(){
+        return Math.abs(topLeft.y - bottomRight.y);
+    }
+
+    @Override
     public String toString() {
         return String.format("Rectángulo [ %s , %s ]", topLeft, bottomRight);
     }
 
+    @Override
+    public void moveFigure(double diffX, double diffY) {
+        topLeft.movePoint(diffX,diffY);
+        bottomRight.movePoint(diffX,diffY);
+    }
 }

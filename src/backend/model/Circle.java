@@ -5,9 +5,9 @@ public class Circle extends Figure {
     protected final Point centerPoint;
     protected final double radius;
 
-    public Circle(Point centerPoint, double radius) {
-        this.centerPoint = centerPoint;
-        this.radius = radius;
+    public Circle(Point startPoint, Point endPoint) {
+        this.centerPoint = startPoint;
+        this.radius = Math.abs(endPoint.getX() - startPoint.getX());
     }
 
     @Override
@@ -23,4 +23,20 @@ public class Circle extends Figure {
         return radius;
     }
 
+    public double getDiameter(){return radius*2;}
+
+    @Override
+    public double getWidth(){
+        return centerPoint.x - radius;
+    }
+
+    @Override
+    public double getHeight(){
+        return centerPoint.y - radius;
+    }
+
+    @Override
+    public void moveFigure(double diffX, double diffY) {
+        centerPoint.movePoint(diffX,diffY);
+    }
 }

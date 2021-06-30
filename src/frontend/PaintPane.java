@@ -30,7 +30,9 @@ public class PaintPane extends BorderPane {
 	ToggleButton selectionButton = new ToggleButton("Seleccionar");
 	ToggleButton rectangleButton = new ToggleButton("Rectángulo");
 	ToggleButton circleButton = new ToggleButton("Círculo");
-
+	ToggleButton ellipseButton = new ToggleButton("Elipse");
+	ToggleButton squareButton = new ToggleButton("Cuadrado");
+	ToggleButton lineButton = new ToggleButton("Line");
 	// Dibujar una figura
 	Point startPoint;
 
@@ -43,7 +45,7 @@ public class PaintPane extends BorderPane {
 	public PaintPane(CanvasState canvasState, StatusPane statusPane) {
 		this.canvasState = canvasState;
 		this.statusPane = statusPane;
-		ToggleButton[] toolsArr = {selectionButton, rectangleButton, circleButton};
+		ToggleButton[] toolsArr = {selectionButton, rectangleButton, circleButton, ellipseButton, squareButton, lineButton};
 		ToggleGroup tools = new ToggleGroup();
 		for (ToggleButton tool : toolsArr) {
 			tool.setMinWidth(90);
@@ -72,8 +74,7 @@ public class PaintPane extends BorderPane {
 				newFigure = new Rectangle(startPoint, endPoint);
 			}
 			else if(circleButton.isSelected()) {
-				double circleRadius = Math.abs(endPoint.getX() - startPoint.getX()); //HACER QUE EL RADIO SE CALCULE SOLO DENTRO DEL CIRCULO
-				newFigure = new Circle(startPoint, circleRadius);
+				newFigure = new Circle(startPoint, endPoint);
 			} else { //Agregar elipse, linea y cuadrado
 				return ;
 			}
@@ -126,15 +127,11 @@ public class PaintPane extends BorderPane {
 				double diffY = (eventPoint.getY() - startPoint.getY()) / 100;
 				if(selectedFigure instanceof Rectangle) {
 					Rectangle rectangle = (Rectangle) selectedFigure;
-					rectangle.getTopLeft().x += diffX;
-					rectangle.getBottomRight().x += diffX;
-					rectangle.getTopLeft().y += diffY;
-					rectangle.getBottomRight().y += diffY;
+					rectangle.moveFigure(diffX,diffY);
 				} else if(selectedFigure instanceof Circle) {
 					Circle circle = (Circle) selectedFigure;
-					circle.getCenterPoint().x += diffX;
-					circle.getCenterPoint().y += diffY;
-				}
+					circle.moveFigure(diffX,diffY);
+				} //Agregar Elipse, Linea y Cuadrado
 				redrawCanvas();
 			}
 		});
@@ -154,14 +151,14 @@ public class PaintPane extends BorderPane {
 			if(figure instanceof Rectangle) {
 				Rectangle rectangle = (Rectangle) figure;
 				gc.fillRect(rectangle.getTopLeft().getX(), rectangle.getTopLeft().getY(),
-						Math.abs(rectangle.getTopLeft().getX() - rectangle.getBottomRight().getX()), Math.abs(rectangle.getTopLeft().getY() - rectangle.getBottomRight().getY()));
+						rectangle.getWidth(), rectangle.getHeight());
 				gc.strokeRect(rectangle.getTopLeft().getX(), rectangle.getTopLeft().getY(),
-						Math.abs(rectangle.getTopLeft().getX() - rectangle.getBottomRight().getX()), Math.abs(rectangle.getTopLeft().getY() - rectangle.getBottomRight().getY()));
+						rectangle.getWidth(), rectangle.getHeight());
 			} else if(figure instanceof Circle) {
 				Circle circle = (Circle) figure;
-				double diameter = circle.getRadius() * 2;
-				gc.fillOval(circle.getCenterPoint().getX() - circle.getRadius(), circle.getCenterPoint().getY() - circle.getRadius(), diameter, diameter);
-				gc.strokeOval(circle.getCenterPoint().getX() - circle.getRadius(), circle.getCenterPoint().getY() - circle.getRadius(), diameter, diameter);
+				double diameter = circle.getDiameter();
+				gc.fillOval(circle.getWidth(), circle.getHeight(), diameter, diameter);
+				gc.strokeOval(circle.getWidth(), circle.getHeight(), diameter, diameter);
 			}
 		}
 	}
