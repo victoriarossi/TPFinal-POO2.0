@@ -41,9 +41,7 @@ public class Rectangle extends Figure {
     }
 
     @Override
-    public GraphicsContext setStrokeAndFill(GraphicsContext gc, Color fillColor, Color strokeColor) {
-        gc.setStroke(strokeColor);
-        gc.setFill(fillColor);
+    public GraphicsContext setStrokeAndFill(GraphicsContext gc) {
         gc.fillRect(topLeft.getX(), topLeft.getY(), getWidth(),getHeight());
         gc.strokeRect(topLeft.getX(), topLeft.getY(), getWidth(),getHeight());
         return gc;

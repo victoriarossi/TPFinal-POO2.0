@@ -3,6 +3,7 @@ package frontend;
 import backend.CanvasState;
 import backend.model.*;
 import javafx.event.ActionEvent;
+import javafx.event.Event;
 import javafx.event.EventHandler;
 import javafx.geometry.Insets;
 import javafx.scene.Cursor;
@@ -12,6 +13,7 @@ import javafx.scene.control.*;
 import javafx.scene.layout.BorderPane;
 import javafx.scene.layout.VBox;
 import javafx.scene.paint.Color;
+import javafx.scene.shape.FillRule;
 
 public class PaintPane extends BorderPane {
 
@@ -123,7 +125,7 @@ public class PaintPane extends BorderPane {
 		});
 		setLeft(buttonsBox);
 		setRight(canvas);
-		//setStrokeAndLine();
+		setStrokeAndLine();
 	}
 
 	private void checkingFigureBelongs(Point eventPoint , StringBuilder label, String elseString){
@@ -151,22 +153,15 @@ public class PaintPane extends BorderPane {
 				gc.setStroke(lineColor);
 			}
 			gc.setFill(fillColor);
-			gc = figure.setStrokeAndFill(gc,colorPickerFill.getValue(),colorPickerThick.getValue());
+			gc = figure.setStrokeAndFill(gc);
 		}
 	}
-//	private void setStrokeAndLine(){
-//			colorPickerThick.setOnAction(new EventHandler<ActionEvent>() {
-//				@Override
-//				public void handle(ActionEvent actionEvent) {
-//					lineColor = colorPickerThick.getValue();
-//				}
-//			});
-//			colorPickerFill.setOnAction(new EventHandler<ActionEvent>() {
-//				@Override
-//				public void handle(ActionEvent actionEvent) {
-//					fillColor = colorPickerFill.getValue();
-//				}
-//			});
-//		}
-//	}
+	private void setStrokeAndLine(){
+		for (Figure figure : canvasState.figures()) {
+			if (figure == selectedFigure) {
+				figure.setStrokeAndFill(gc).setFill(colorPickerFill.getValue());
+				figure.setStrokeAndFill(gc).setStroke(colorPickerThick.getValue());
+			}
+		}
+	}
 }

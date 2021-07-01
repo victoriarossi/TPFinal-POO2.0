@@ -43,9 +43,7 @@ public class Ellipse extends Rectangle{
     }
 
     @Override
-    public GraphicsContext setStrokeAndFill(GraphicsContext gc, Color fillColor, Color strokeColor) {
-        gc.setStroke(strokeColor);
-        gc.setFill(fillColor);
+    public GraphicsContext setStrokeAndFill(GraphicsContext gc) {
         gc.fillOval(getWidth(),getHeight(),getAxisMay(),getAxisMen());
         gc.strokeOval(getWidth(),getHeight(),getAxisMay(),getAxisMen());
         return gc;

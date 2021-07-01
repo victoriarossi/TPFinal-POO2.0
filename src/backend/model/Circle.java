@@ -45,9 +45,7 @@ public class Circle extends Figure {
     }
 
     @Override
-    public GraphicsContext setStrokeAndFill(GraphicsContext gc, Color fillColor, Color strokeColor) {
-        gc.setStroke(strokeColor);
-        gc.setFill(fillColor);
+    public GraphicsContext setStrokeAndFill(GraphicsContext gc) {
         gc.fillOval(getWidth(),getHeight(),getDiameter(),getDiameter());
         gc.strokeOval(getWidth(),getHeight(),getDiameter(),getDiameter());
         return gc;

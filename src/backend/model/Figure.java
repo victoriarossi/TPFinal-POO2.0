@@ -9,5 +9,5 @@ public abstract class Figure {
     public abstract double getWidth();
     public abstract double getHeight();
     public abstract boolean figureBelongs(Point eventPoint);
-    public abstract GraphicsContext setStrokeAndFill(GraphicsContext gc, Color fillColor, Color strokeColor);
+    public abstract GraphicsContext setStrokeAndFill(GraphicsContext gc);
 }

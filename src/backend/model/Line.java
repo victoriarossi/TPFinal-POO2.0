@@ -1,7 +1,6 @@
 package backend.model;
 
 import javafx.scene.canvas.GraphicsContext;
-import javafx.scene.paint.Color;
 
 public class Line extends Rectangle{
 
@@ -20,10 +19,9 @@ public class Line extends Rectangle{
     }
 
     @Override
-    public GraphicsContext setStrokeAndFill(GraphicsContext gc, Color fillColor, Color strokeColor) {
-        gc.setStroke(strokeColor);
-        gc.setFill(fillColor);
+    public GraphicsContext setStrokeAndFill(GraphicsContext gc) {
         gc.strokeLine(getTopLeft().getX(),getTopLeft().getY(),getBottomRight().getX(),getBottomRight().getY());
         return gc;
     }
+
 }
