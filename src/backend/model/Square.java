@@ -1,20 +1,21 @@
 package backend.model;
 
-
 public class Square extends Rectangle {
+
     public Square(Point topLeft, Point bottomRight) {
         super(topLeft, new Point(bottomRight.getX(), bottomRight.getX()));
     }
 
+    @Override
     public String toString() {
-        return String.format("Cuadrado [ %s , %s ]", this.getTopLeft().getX(), this.getBottomRight().getX());
+        return String.format("Cuadrado [ %s , %s ]", getTopLeft().getX(), getBottomRight().getX());
     }
-
-    public double getHeight() {
-        return Math.abs(this.getTopLeft().getY());
+    @Override
+    public double getHeight(){
+        return Math.abs(getTopLeft().getY());
     }
-
-    public double getWidth() {
-        return this.getHeight();
+    @Override
+    public double getWidth(){
+        return getHeight();
     }
 }

@@ -1,242 +1,208 @@
 package frontend;
 
-
 import backend.CanvasState;
-import backend.model.Circle;
-import backend.model.Ellipse;
-import backend.model.Figure;
-import backend.model.Line;
-import backend.model.Point;
-import backend.model.Rectangle;
-import backend.model.Square;
-import java.util.ArrayList;
-import java.util.Iterator;
-import java.util.List;
+import backend.model.*;
+import javafx.event.EventHandler;
 import javafx.geometry.Insets;
 import javafx.scene.Cursor;
-import javafx.scene.Node;
 import javafx.scene.canvas.Canvas;
 import javafx.scene.canvas.GraphicsContext;
-import javafx.scene.control.ColorPicker;
-import javafx.scene.control.Label;
-import javafx.scene.control.Slider;
-import javafx.scene.control.ToggleButton;
-import javafx.scene.control.ToggleGroup;
+import javafx.scene.control.*;
+import javafx.scene.input.MouseEvent;
 import javafx.scene.layout.BorderPane;
 import javafx.scene.layout.VBox;
 import javafx.scene.paint.Color;
 
+import java.util.ArrayList;
+import java.util.List;
+
+
 public class PaintPane extends BorderPane {
+
+	// BackEnd
 	CanvasState canvasState;
-	Canvas canvas = new Canvas(800.0D, 600.0D);
-	GraphicsContext gc;
-	private static Color strokeColor;
-	private static Color fillColor;
-	ToggleButton selectionButton;
-	ToggleButton rectangleButton;
-	ToggleButton circleButton;
-	ToggleButton ellipseButton;
-	ToggleButton squareButton;
-	ToggleButton lineButton;
-	ToggleButton deleteButton;
-	Slider slider;
-	Label thick;
-	Label color;
-	ColorPicker colorPickerThick;
-	ColorPicker colorPickerFill;
+
+	// Canvas y relacionados
+	Canvas canvas = new Canvas(800, 600);
+	GraphicsContext gc = canvas.getGraphicsContext2D();
+	private static Color strokeColor = Color.BLACK;
+	private static Color fillColor = Color.YELLOW;
+
+	// Botones Barra Izquierda
+	ToggleButton selectionButton = new ToggleButton("Seleccionar");
+	ToggleButton rectangleButton = new ToggleButton("Rectángulo");
+	ToggleButton circleButton = new ToggleButton("Círculo");
+	ToggleButton ellipseButton = new ToggleButton("Elipse");
+	ToggleButton squareButton = new ToggleButton("Cuadrado");
+	ToggleButton lineButton = new ToggleButton("Linea");
+	ToggleButton deleteButton = new ToggleButton("Borrar");
+	Slider slider = new Slider(1, 50, 1);
+	Label thick = new Label("Borde:");
+	Label color = new Label("Relleno:");
+	ColorPicker colorPickerThick = new ColorPicker(strokeColor);
+	ColorPicker colorPickerFill = new ColorPicker(fillColor);
+	// Dibujar una figura
 	Point startPoint;
 	Point endPoint;
-	Point selectedStartPoint;
-	Point selectedEndPoint;
-	List<Figure> selectedFigure;
+
+	//Selecionar Varias figuras en rectangulo
+	Point selectedStartPoint, selectedEndPoint;
+
+	// Seleccion de figuras
+	List<Figure> selectedFigure = new ArrayList<>();
+
+	// StatusBar
 	StatusPane statusPane;
 
 	public PaintPane(CanvasState canvasState, StatusPane statusPane) {
-		this.gc = this.canvas.getGraphicsContext2D();
-		this.selectionButton = new ToggleButton("Seleccionar");
-		this.rectangleButton = new ToggleButton("Rectángulo");
-		this.circleButton = new ToggleButton("Círculo");
-		this.ellipseButton = new ToggleButton("Elipse");
-		this.squareButton = new ToggleButton("Cuadrado");
-		this.lineButton = new ToggleButton("Linea");
-		this.deleteButton = new ToggleButton("Borrar");
-		this.slider = new Slider(1.0D, 50.0D, 1.0D);
-		this.thick = new Label("Borde:");
-		this.color = new Label("Relleno:");
-		this.colorPickerThick = new ColorPicker(strokeColor);
-		this.colorPickerFill = new ColorPicker(fillColor);
-		this.selectedFigure = new ArrayList();
 		this.canvasState = canvasState;
 		this.statusPane = statusPane;
-		ToggleButton[] toolsArr = new ToggleButton[]{this.selectionButton, this.rectangleButton, this.circleButton, this.ellipseButton, this.squareButton, this.lineButton, this.deleteButton};
+		ToggleButton[] toolsArr = {selectionButton, rectangleButton, circleButton, ellipseButton, squareButton, lineButton,deleteButton };
 		ToggleGroup tools = new ToggleGroup();
-		ToggleButton[] var5 = toolsArr;
-		int var6 = toolsArr.length;
-
-		for(int var7 = 0; var7 < var6; ++var7) {
-			ToggleButton tool = var5[var7];
-			tool.setMinWidth(90.0D);
+		for (ToggleButton tool : toolsArr) {
+			tool.setMinWidth(90);
 			tool.setToggleGroup(tools);
 			tool.setCursor(Cursor.HAND);
 		}
-
-		VBox buttonsBox = new VBox(10.0D);
+		VBox buttonsBox = new VBox(10);
 		buttonsBox.getChildren().addAll(toolsArr);
-		this.slider.setShowTickMarks(true);
-		this.slider.setShowTickLabels(true);
-		this.colorPickerThick.getStyleClass().add("split-button");
-		this.colorPickerFill.getStyleClass().add("split-button");
-		buttonsBox.getChildren().addAll(new Node[]{this.thick, this.slider, this.colorPickerThick, this.color, this.colorPickerFill});
-		buttonsBox.setPadding(new Insets(5.0D));
+		slider.setShowTickMarks(true);
+		slider.setShowTickLabels(true);
+		colorPickerThick.getStyleClass().add("split-button");
+		colorPickerFill.getStyleClass().add("split-button");
+		buttonsBox.getChildren().addAll(thick, slider, colorPickerThick, color, colorPickerFill);
+		buttonsBox.setPadding(new Insets(5));
 		buttonsBox.setStyle("-fx-background-color: #999");
-		buttonsBox.setPrefWidth(100.0D);
-		this.gc.setLineWidth(1.0D);
-		this.canvas.setOnMousePressed((event) -> {
-			this.startPoint = new Point(event.getX(), event.getY());
+		buttonsBox.setPrefWidth(100);
+		gc.setLineWidth(1);
+		canvas.setOnMousePressed(event -> {
+			startPoint = new Point(event.getX(), event.getY());
 		});
-		this.canvas.setOnMouseReleased((event) -> {
-			this.endPoint = new Point(event.getX(), event.getY());
-			Figure newFigure = null;
-			if (!this.lineButton.isSelected() && this.endPoint.validatePoint(this.startPoint)) {
-				if (this.rectangleButton.isSelected()) {
-					newFigure = new Rectangle(this.startPoint, this.endPoint);
-				} else if (this.circleButton.isSelected()) {
-					newFigure = new Circle(this.startPoint, this.endPoint);
-				} else if (this.squareButton.isSelected()) {
-					newFigure = new Square(this.startPoint, this.endPoint);
-				} else {
-					if (!this.ellipseButton.isSelected()) {
-						return;
-					}
-
-					newFigure = new Ellipse(this.startPoint, this.endPoint);
+		canvas.setOnMouseReleased(event -> {
+			endPoint = new Point(event.getX(), event.getY());
+			Figure newFigure=null;
+			if (!lineButton.isSelected() && endPoint.validatePoint(startPoint)) {
+				//Queda horrible, hay que cambiarlo. Funciona para todos
+				if (rectangleButton.isSelected()) {
+					newFigure = new Rectangle(startPoint, endPoint);
+				} else if (circleButton.isSelected()) {
+					newFigure = new Circle(startPoint, endPoint);
+				} else if (squareButton.isSelected()){
+					newFigure = new Square(startPoint, endPoint);
+				}else if (ellipseButton.isSelected()){
+					newFigure = new Ellipse(startPoint, endPoint);
+				}else{
+					return;
 				}
-			} else if (this.lineButton.isSelected()) {
-				newFigure = new Line(this.startPoint, this.endPoint);
+			} else if(lineButton.isSelected()){
+				newFigure = new Line(startPoint, endPoint);
 			}
-
-			((Figure)newFigure).setFillColor(fillColor);
-			canvasState.addFigure((Figure)newFigure);
-			this.startPoint = null;
-			this.redrawCanvas();
+			newFigure.setFillColor(colorPickerFill.getValue());
+			newFigure.setStrokeColor(colorPickerThick.getValue());
+			newFigure.setThickness(slider.getValue());
+			canvasState.addFigure(newFigure);
+			startPoint = null;
+			redrawCanvas();
 		});
-		this.canvas.setOnMouseMoved((event) -> {
+
+		canvas.setOnMouseMoved(event -> {
 			Point eventPoint = new Point(event.getX(), event.getY());
-			Iterator var3 = this.selectedFigure.iterator();
-
-			while(var3.hasNext()) {
-				Figure figure = (Figure)var3.next();
+			for(Figure figure : selectedFigure){
 				StringBuilder label = new StringBuilder();
-				this.checkingFigureBelongs(figure, label, eventPoint.toString());
+				checkingFigureBelongs(figure,label,eventPoint.toString());
 			}
-
 		});
-		this.canvas.setOnMouseClicked((event) -> {
-			if (this.selectionButton.isSelected()) {
-				this.selectedFigure.clear();
-				Rectangle selectedRectangle = new Rectangle(this.startPoint, this.endPoint);
-				this.searchingFigures(selectedRectangle);
+
+		canvas.setOnMouseClicked(event -> {
+			if (selectionButton.isSelected()) {
+				selectedFigure.clear();
+				Rectangle selectedRectangle = new Rectangle(startPoint,endPoint);
+				searchingFigures(selectedRectangle);
 				StringBuilder label = new StringBuilder("Se seleccionó: ");
-				Iterator var4 = this.selectedFigure.iterator();
-
-				while(var4.hasNext()) {
-					Figure figure = (Figure)var4.next();
-					this.checkingFigureBelongs(figure, label, "Ninguna figura encontrada");
-					this.redrawCanvas();
+				for (Figure figure : selectedFigure){
+					checkingFigureBelongs(figure,label,"Ninguna figura encontrada");
+					redrawCanvas();
 				}
 			}
-
 		});
-		this.canvas.setOnMouseDragged((event) -> {
-			if (this.selectionButton.isSelected()) {
+
+		canvas.setOnMouseDragged(event -> {
+			if (selectionButton.isSelected()) {
 				Point eventPoint = new Point(event.getX(), event.getY());
-				Iterator var3 = this.selectedFigure.iterator();
-
-				while(var3.hasNext()) {
-					Figure figure = (Figure)var3.next();
-					figure.moveFigure(eventPoint.getDiffX(this.startPoint), eventPoint.getDiffY(this.startPoint));
+				for(Figure figure : selectedFigure){
+					figure.moveFigure(eventPoint.getDiffX(startPoint), eventPoint.getDiffY(startPoint));
 				}
-
-				this.redrawCanvas();
+				redrawCanvas();
 			}
+		});
+		setLeft(buttonsBox);
+		setRight(canvas);
+
+		slider.setOnMouseReleased(event -> {
+			for( Figure figure : selectedFigure){
+				figure.setThickness(slider.getValue());
+			}
+			redrawCanvas();
+		});
+
+		deleteButton.setOnMousePressed(event -> {
+			for ( Figure figure : selectedFigure){
+				canvasState.deleteFigure(figure);
+			}
+			redrawCanvas();
 
 		});
-		this.canvas.setOnMouseDragReleased((event) -> {
-		});
-		this.setLeft(buttonsBox);
-		this.setRight(this.canvas);
-		this.colorPickerThick.setOnAction((event) -> {
-			Iterator var2 = this.selectedFigure.iterator();
-
-			while(var2.hasNext()) {
-				Figure figure = (Figure)var2.next();
-				figure.setStrokeColor((Color)this.colorPickerThick.getValue());
+		colorPickerThick.setOnAction(event -> {
+			for(Figure figure : selectedFigure){
+				figure.setStrokeColor(colorPickerThick.getValue());
 			}
-
-			this.redrawCanvas();
+			redrawCanvas();
 		});
-		this.colorPickerFill.setOnAction((event) -> {
-			Iterator var2 = this.selectedFigure.iterator();
-
-			while(var2.hasNext()) {
-				Figure figure = (Figure)var2.next();
-				figure.setFillColor((Color)this.colorPickerFill.getValue());
+		colorPickerFill.setOnAction(event -> {
+			for(Figure figure : selectedFigure){
+				figure.setFillColor(colorPickerFill.getValue());
 			}
+			redrawCanvas();
+		});
+		slider.setOnMouseClicked(event -> {
 
-			this.redrawCanvas();
 		});
 	}
 
-	private void checkingFigureBelongs(Figure mySelectedFigure, StringBuilder label, String elseString) {
+	private void checkingFigureBelongs(Figure mySelectedFigure, StringBuilder label, String elseString){
 		boolean found = false;
-		Iterator var5 = this.canvasState.figures().iterator();
-
-		while(var5.hasNext()) {
-			Figure figure = (Figure)var5.next();
-			if (figure == mySelectedFigure) {
-				found = true;
+		for (Figure figure : canvasState.figures()) {
+			if (figure==mySelectedFigure) {
+				found=true;
 				label.append(figure.toString());
 			}
 		}
-
-		if (!found) {
-			this.statusPane.updateStatus(elseString);
-		} else {
-			this.statusPane.updateStatus(label.toString());
+		if(!found){
+			statusPane.updateStatus(elseString);
+		}else {
+			statusPane.updateStatus(label.toString());
 		}
-
 	}
 
 	void redrawCanvas() {
-		this.gc.clearRect(0.0D, 0.0D, this.canvas.getWidth(), this.canvas.getHeight());
+		gc.clearRect(0, 0, canvas.getWidth(), canvas.getHeight());
+		for (Figure figure : canvasState.figures()) {
+			if (selectedFigure.contains(figure)) {
+				gc.setStroke(Color.RED);
+				gc.setFill(fillColor);
+				figure.setFillColor(colorPickerFill.getValue());
+				figure.setStrokeColor(colorPickerThick.getValue());
+			}
+			gc = figure.setStrokeAndFill(gc, figure.getFill() , figure.getLine(), figure.getThickness());
+		}
+	}
 
-		Figure figure;
-		for(Iterator var1 = this.canvasState.figures().iterator(); var1.hasNext(); this.gc = figure.setStrokeAndFill(this.gc, figure.getFill(), figure.getLine())) {
-			figure = (Figure)var1.next();
-			if (this.selectedFigure.contains(figure)) {
-				this.gc.setStroke(Color.RED);
-				this.gc.setFill(fillColor);
-				figure.setFillColor((Color)this.colorPickerFill.getValue());
-				figure.setStrokeColor((Color)this.colorPickerThick.getValue());
+	void searchingFigures(Rectangle rectangle){
+		for(Figure figure : canvasState.figures()){
+			if(figure.figureBelongsIn(rectangle)){
+				selectedFigure.add(figure);
 			}
 		}
-
 	}
 
-	void searchingFigures(Rectangle rectangle) {
-		Iterator var2 = this.canvasState.figures().iterator();
-
-		while(var2.hasNext()) {
-			Figure figure = (Figure)var2.next();
-			if (figure.figureBelongsIn(rectangle)) {
-				this.selectedFigure.add(figure);
-			}
-		}
-
-	}
-
-	static {
-		strokeColor = Color.BLACK;
-		fillColor = Color.YELLOW;
-	}
 }

@@ -3,32 +3,29 @@ package backend.model;
 import javafx.scene.canvas.GraphicsContext;
 import javafx.scene.paint.Color;
 
-public class Line extends Rectangle {
-    private Color lineColor;
+public class Line extends Rectangle{
 
-    public Line(Point firstPoint, Point secondPoint) {
-        super(firstPoint, secondPoint);
+
+    public Line(Point firstPoint, Point secondPoint){
+        super(firstPoint,secondPoint);
     }
 
+    @Override
     public double getHeight() {
-        return 0.0D;
+        return 0;
     }
 
-    public String toString() {
-        return String.format("Línea [ %s, %s ]", this.getTopLeft(), this.getBottomRight());
+    @Override
+    public String toString(){
+        return String.format("Línea [ %s, %s ]", getTopLeft(),getBottomRight());
     }
 
-    public GraphicsContext setStrokeAndFill(GraphicsContext gc, Color fillColor, Color strokeColor) {
+    @Override
+    public GraphicsContext setStrokeAndFill(GraphicsContext gc, Color fillColor, Color strokeColor, double thick) {
         gc.setStroke(strokeColor);
-        gc.strokeLine(this.getTopLeft().getX(), this.getTopLeft().getY(), this.getBottomRight().getX(), this.getBottomRight().getY());
+        gc.setLineWidth(thick);
+        gc.strokeLine(getTopLeft().getX(),getTopLeft().getY(),getBottomRight().getX(),getBottomRight().getY());
         return gc;
     }
 
-    public void setStrokeColor(Color lineColor) {
-        this.lineColor = lineColor;
-    }
-
-    public Color getLine() {
-        return this.lineColor;
-    }
 }

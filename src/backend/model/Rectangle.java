@@ -4,10 +4,8 @@ import javafx.scene.canvas.GraphicsContext;
 import javafx.scene.paint.Color;
 
 public class Rectangle extends Figure {
-    private final Point topLeft;
-    private final Point bottomRight;
-    private Color fillColor;
-    private Color lineColor;
+
+    private final Point topLeft, bottomRight;
 
     public Rectangle(Point topLeft, Point bottomRight) {
         this.topLeft = topLeft;
@@ -15,63 +13,58 @@ public class Rectangle extends Figure {
     }
 
     public Point getTopLeft() {
-        return this.topLeft;
+        return topLeft;
     }
 
     public Point getBottomRight() {
-        return this.bottomRight;
+        return bottomRight;
     }
 
-    public Point getCenter() {
-        return new Point(this.getWidth() / 2.0D, this.getHeight() / 2.0D);
+    public Point getCenter(){
+        return new Point(getWidth() / 2 , getHeight() / 2);
     }
 
-    public double getWidth() {
-        return Math.abs(this.topLeft.getX() - this.bottomRight.getX());
+    @Override
+    public double getWidth(){
+        return Math.abs(topLeft.getX() - bottomRight.getX());
     }
 
-    public double getHeight() {
-        return Math.abs(this.topLeft.getY() - this.bottomRight.getY());
+    @Override
+    public double getHeight(){
+        return Math.abs(topLeft.getY() - bottomRight.getY());
     }
 
+    @Override
     public boolean figureBelongs(Point eventPoint) {
-        return eventPoint.getX() > this.topLeft.getX() && eventPoint.getX() < this.bottomRight.getX() && eventPoint.getY() > this.topLeft.getY() && eventPoint.getY() < this.bottomRight.getY();
+        return eventPoint.getX() > topLeft.getX() && eventPoint.getX() < bottomRight.getX() &&
+                eventPoint.getY() > topLeft.getY() && eventPoint.getY() < bottomRight.getY();
     }
 
-    public GraphicsContext setStrokeAndFill(GraphicsContext gc, Color fillColor, Color strokeColor) {
+    @Override
+    public GraphicsContext setStrokeAndFill(GraphicsContext gc, Color fillColor, Color strokeColor, double thick) {
         gc.setFill(fillColor);
         gc.setStroke(strokeColor);
-        gc.fillRect(this.topLeft.getX(), this.topLeft.getY(), this.getWidth(), this.getHeight());
-        gc.strokeRect(this.topLeft.getX(), this.topLeft.getY(), this.getWidth(), this.getHeight());
+        gc.setLineWidth(thick);
+        gc.fillRect(topLeft.getX(), topLeft.getY(), getWidth(),getHeight());
+        gc.strokeRect(topLeft.getX(), topLeft.getY(), getWidth(),getHeight());
         return gc;
     }
 
-    public void setStrokeColor(Color lineColor) {
-        this.lineColor = lineColor;
-    }
 
-    public void setFillColor(Color fillColor) {
-        this.fillColor = fillColor;
-    }
-
-    public Color getFill() {
-        return this.fillColor;
-    }
-
-    public Color getLine() {
-        return this.lineColor;
-    }
-
+    @Override
     public String toString() {
-        return String.format("Rectángulo [ %s , %s ]", this.topLeft, this.bottomRight);
+        return String.format("Rectángulo [ %s , %s ]", topLeft, bottomRight);
     }
 
+    @Override
     public void moveFigure(double diffX, double diffY) {
-        this.topLeft.movePoint(diffX, diffY);
-        this.bottomRight.movePoint(diffX, diffY);
+        topLeft.movePoint(diffX,diffY);
+        bottomRight.movePoint(diffX,diffY);
     }
 
-    public boolean figureBelongsIn(Rectangle rectangle) {
-        return rectangle.figureBelongs(this.topLeft) && rectangle.figureBelongs(this.bottomRight);
+    @Override
+    public boolean figureBelongsIn(Rectangle rectangle){
+        return rectangle.figureBelongs(topLeft) && rectangle.figureBelongs(bottomRight);
     }
+
 }
