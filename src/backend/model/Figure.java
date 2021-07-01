@@ -8,24 +8,20 @@ import javafx.scene.paint.Color;
 
 
 
-public abstract class Figure {
+public abstract class Figure{
+
+    private Color fillColor, lineColor;
+
+    private double thick;
+
 
     public abstract void moveFigure(double diffX, double diffY);
-
-    public abstract double getWidth();
-
-    public abstract double getHeight();
 
     public abstract boolean figureBelongs(Point eventPoint);
 
     public abstract GraphicsContext setStrokeAndFill(GraphicsContext gc, Color fillColor, Color strokeColor, double thick);
 
     public abstract boolean figureBelongsIn(Rectangle rectangle);
-
-    private Color fillColor, lineColor;
-
-    private double thick;
-
 
     public void setStrokeColor(Color lineColor) {
         this.lineColor = lineColor;

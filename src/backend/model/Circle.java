@@ -3,45 +3,48 @@ package backend.model;
 import javafx.scene.canvas.GraphicsContext;
 import javafx.scene.paint.Color;
 
-public class Circle extends Figure {
+public class Circle extends Ellipse {
 
-    protected final Point centerPoint;
-    protected final double radius;
+    public Circle(Point topLeft, Point bottomRight) {
+        super(topLeft, bottomRight);
+    }
 
-    public Circle(Point startPoint, Point endPoint) {
-        this.centerPoint = startPoint;
-        this.radius = Math.abs(endPoint.getX() - startPoint.getX());
+    @Override
+    public Point getCenter(Point topLeft, Point bottomRight){
+        return topLeft;
+    }
+
+    @Override
+    public double setAxisX(Point topLeft, Point bottomRight){
+        return Math.abs(bottomRight.getX() - topLeft.getX());
+    }
+
+    @Override
+    public double setAxisY(Point topLeft, Point bottomRight){
+        return setAxisX(topLeft, bottomRight);
     }
 
     @Override
     public String toString() {
-        return String.format("Círculo [Centro: %s, Radio: %.2f]", centerPoint, radius);
+        return String.format("Círculo [Centro: %s, Radio: %.2f]", getCenterPoint(), getAxisX());
     }
 
-    public Point getCenterPoint() {
-        return centerPoint;
-    }
+    public double getDiameter(){return getAxisX()*2;}
 
-    public double getRadius() {
-        return radius;
-    }
 
-    public double getDiameter(){return radius*2;}
-
-    @Override
     public double getWidth(){
-        return centerPoint.getX() - radius;
+        return getCenterPoint().getX() - getAxisX();
     }
 
-    @Override
+
     public double getHeight(){
-        return centerPoint.getY() - radius;
+        return getCenterPoint().getY() - getAxisX();
     }
 
     @Override
     public boolean figureBelongs(Point eventPoint) {
-        return Math.sqrt(Math.pow(centerPoint.getX() - eventPoint.getX(), 2) +
-                Math.pow(centerPoint.getY() - eventPoint.getY(), 2)) < radius;
+        return Math.sqrt(Math.pow(getCenterPoint().getX() - eventPoint.getX(), 2) +
+                Math.pow(getCenterPoint().getY() - eventPoint.getY(), 2)) < getAxisX();
     }
 
     @Override
@@ -54,22 +57,4 @@ public class Circle extends Figure {
         return gc;
     }
 
-
-    @Override
-    public void moveFigure(double diffX, double diffY) {
-        centerPoint.movePoint(diffX,diffY);
-    }
-
-    @Override
-    public boolean figureBelongsIn(Rectangle rectangle){
-        Point topPoint=centerPoint;
-        Point bottomPoint=centerPoint;
-        Point leftPoint = centerPoint;
-        Point rightPoint=centerPoint;
-        rightPoint.movePoint(radius,0);
-        leftPoint.movePoint(-radius,0);
-        bottomPoint.movePoint(0,-radius);
-        topPoint.movePoint(0,radius);
-        return rectangle.figureBelongs(topPoint) && rectangle.figureBelongs(bottomPoint) && rectangle.figureBelongs(leftPoint) && rectangle.figureBelongs(rightPoint);
-    }
 }

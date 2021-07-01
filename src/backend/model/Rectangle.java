@@ -20,16 +20,13 @@ public class Rectangle extends Figure {
         return bottomRight;
     }
 
-    public Point getCenter(){
-        return new Point(getWidth() / 2 , getHeight() / 2);
-    }
 
-    @Override
+
     public double getWidth(){
         return Math.abs(topLeft.getX() - bottomRight.getX());
     }
 
-    @Override
+
     public double getHeight(){
         return Math.abs(topLeft.getY() - bottomRight.getY());
     }
