@@ -3,71 +3,55 @@ package backend.model;
 import javafx.scene.canvas.GraphicsContext;
 import javafx.scene.paint.Color;
 
-//Para dibujar una elipse se tomará al punto inicial (del click) como esquina superior izquierda
-//        del rectángulo que encierra a la elipse y al punto final como esquina inferior derecha del rectángulo
-//        que encierra a la elipse.
-public class Ellipse extends Rectangle{
+public class Ellipse extends Rectangle {
+    private Color fillColor;
+    private Color lineColor;
 
-    public Ellipse(Point topLeft, Point bottomRight){
-        super(topLeft,bottomRight);
+    public Ellipse(Point topLeft, Point bottomRight) {
+        super(topLeft, bottomRight);
     }
-    private Color fillColor, lineColor;
 
-    @Override
     public boolean figureBelongs(Point eventPoint) {
-        return ((Math.pow((eventPoint.getX() - getCenter().getX()),2))/Math.pow(getWidth(),2)) +
-                ((Math.pow((eventPoint.getY() - getCenter().getY()),2))/Math.pow(getHeight(),2))<=1;
+        return Math.pow(eventPoint.getX() - this.getCenter().getX(), 2.0D) / Math.pow(this.getWidth(), 2.0D) + Math.pow(eventPoint.getY() - this.getCenter().getY(), 2.0D) / Math.pow(this.getHeight(), 2.0D) <= 1.0D;
     }
 
-    public double getAxisMay(){
-        if(getHeight()>getWidth()){
-            return getHeight();
-        }
-        return getWidth();
+    public double getAxisMay() {
+        return this.getHeight() > this.getWidth() ? this.getHeight() : this.getWidth();
     }
 
-    public double getAxisMen(){
-        if(getHeight()>getWidth()){
-            return getWidth();
-        }
-        return getHeight();
+    public double getAxisMen() {
+        return this.getHeight() > this.getWidth() ? this.getWidth() : this.getHeight();
     }
 
-    @Override
     public String toString() {
-        return String.format("Elipse [Centro: %s, Eje Mayor: %.2f, Eje Menor: %.2f]", getCenter(), getAxisMay(), getAxisMen());
+        return String.format("Elipse [Centro: %s, Eje Mayor: %.2f, Eje Menor: %.2f]", this.getCenter(), this.getAxisMay(), this.getAxisMen());
     }
 
-    @Override
     public void moveFigure(double diffX, double diffY) {
-        getCenter().movePoint(diffX,diffY);
+        this.getCenter().movePoint(diffX, diffY);
     }
 
-    @Override
     public GraphicsContext setStrokeAndFill(GraphicsContext gc, Color fillColor, Color strokeColor) {
         gc.setFill(fillColor);
         gc.setStroke(strokeColor);
-        gc.fillOval(getWidth(),getHeight(),getAxisMay(),getAxisMen());
-        gc.strokeOval(getWidth(),getHeight(),getAxisMay(),getAxisMen());
+        gc.fillOval(this.getWidth(), this.getHeight(), this.getAxisMay(), this.getAxisMen());
+        gc.strokeOval(this.getWidth(), this.getHeight(), this.getAxisMay(), this.getAxisMen());
         return gc;
     }
-    @Override
+
     public void setFillColor(Color fillColor) {
         this.fillColor = fillColor;
     }
 
-    @Override
     public void setStrokeColor(Color lineColor) {
         this.lineColor = lineColor;
     }
 
-    @Override
     public Color getFill() {
-        return fillColor;
+        return this.fillColor;
     }
 
-    @Override
     public Color getLine() {
-        return lineColor;
+        return this.lineColor;
     }
 }

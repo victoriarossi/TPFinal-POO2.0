@@ -4,91 +4,81 @@ import javafx.scene.canvas.GraphicsContext;
 import javafx.scene.paint.Color;
 
 public class Circle extends Figure {
-
     protected final Point centerPoint;
     protected final double radius;
-    private Color fillColor,lineColor;
+    private Color fillColor;
+    private Color lineColor;
 
     public Circle(Point startPoint, Point endPoint) {
         this.centerPoint = startPoint;
         this.radius = Math.abs(endPoint.getX() - startPoint.getX());
     }
 
-    @Override
     public String toString() {
-        return String.format("Círculo [Centro: %s, Radio: %.2f]", centerPoint, radius);
+        return String.format("Círculo [Centro: %s, Radio: %.2f]", this.centerPoint, this.radius);
     }
 
     public Point getCenterPoint() {
-        return centerPoint;
+        return this.centerPoint;
     }
 
     public double getRadius() {
-        return radius;
+        return this.radius;
     }
 
-    public double getDiameter(){return radius*2;}
-
-    @Override
-    public double getWidth(){
-        return centerPoint.getX() - radius;
+    public double getDiameter() {
+        return this.radius * 2.0D;
     }
 
-    @Override
-    public double getHeight(){
-        return centerPoint.getY() - radius;
+    public double getWidth() {
+        return this.centerPoint.getX() - this.radius;
     }
 
-    @Override
+    public double getHeight() {
+        return this.centerPoint.getY() - this.radius;
+    }
+
     public boolean figureBelongs(Point eventPoint) {
-        return Math.sqrt(Math.pow(centerPoint.getX() - eventPoint.getX(), 2) +
-                Math.pow(centerPoint.getY() - eventPoint.getY(), 2)) < radius;
+        return Math.sqrt(Math.pow(this.centerPoint.getX() - eventPoint.getX(), 2.0D) + Math.pow(this.centerPoint.getY() - eventPoint.getY(), 2.0D)) < this.radius;
     }
 
-    @Override
     public GraphicsContext setStrokeAndFill(GraphicsContext gc, Color fillColor, Color strokeColor) {
         gc.setFill(fillColor);
         gc.setStroke(strokeColor);
-        gc.fillOval(getWidth(),getHeight(),getDiameter(),getDiameter());
-        gc.strokeOval(getWidth(),getHeight(),getDiameter(),getDiameter());
+        gc.fillOval(this.getWidth(), this.getHeight(), this.getDiameter(), this.getDiameter());
+        gc.strokeOval(this.getWidth(), this.getHeight(), this.getDiameter(), this.getDiameter());
         return gc;
     }
 
-    @Override
     public void setStrokeColor(Color lineColor) {
         this.lineColor = lineColor;
     }
 
-    @Override
     public void setFillColor(Color fillColor) {
         this.fillColor = fillColor;
     }
 
-    @Override
     public Color getFill() {
-        return fillColor;
+        return this.fillColor;
     }
 
-    @Override
     public Color getLine() {
-        return lineColor;
+        return this.lineColor;
     }
 
-    @Override
     public void moveFigure(double diffX, double diffY) {
-        centerPoint.movePoint(diffX,diffY);
+        this.centerPoint.movePoint(diffX, diffY);
     }
 
-    @Override
-    public boolean figureBelongsIn(Rectangle rectangle){
-        Point topPoint=centerPoint;
-        Point bottomPoint=centerPoint;
-        Point leftPoint = centerPoint;
-        Point rightPoint=centerPoint;
-        rightPoint.movePoint(radius,0);
-        leftPoint.movePoint(-radius,0);
-        bottomPoint.movePoint(0,-radius);
-        topPoint.movePoint(0,radius);
+    public boolean figureBelongsIn(Rectangle rectangle) {
+        Point topPoint = this.centerPoint;
+        Point bottomPoint = this.centerPoint;
+        Point leftPoint = this.centerPoint;
+        Point rightPoint = this.centerPoint;
+        rightPoint.movePoint(this.radius, 0.0D);
+        leftPoint.movePoint(-this.radius, 0.0D);
+        bottomPoint.movePoint(0.0D, -this.radius);
+        topPoint.movePoint(0.0D, this.radius);
         return rectangle.figureBelongs(topPoint) && rectangle.figureBelongs(bottomPoint) && rectangle.figureBelongs(leftPoint) && rectangle.figureBelongs(rightPoint);
     }
 }
