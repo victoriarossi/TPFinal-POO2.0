@@ -7,6 +7,7 @@ public class Circle extends Figure {
 
     protected final Point centerPoint;
     protected final double radius;
+    private Color fillColor,lineColor;
 
     public Circle(Point startPoint, Point endPoint) {
         this.centerPoint = startPoint;
@@ -45,15 +46,49 @@ public class Circle extends Figure {
     }
 
     @Override
-    public GraphicsContext setStrokeAndFill(GraphicsContext gc) {
+    public GraphicsContext setStrokeAndFill(GraphicsContext gc, Color fillColor, Color strokeColor) {
+        gc.setFill(fillColor);
+        gc.setStroke(strokeColor);
         gc.fillOval(getWidth(),getHeight(),getDiameter(),getDiameter());
         gc.strokeOval(getWidth(),getHeight(),getDiameter(),getDiameter());
         return gc;
     }
 
+    @Override
+    public void setStrokeColor(Color lineColor) {
+        this.lineColor = lineColor;
+    }
+
+    @Override
+    public void setFillColor(Color fillColor) {
+        this.fillColor = fillColor;
+    }
+
+    @Override
+    public Color getFill() {
+        return fillColor;
+    }
+
+    @Override
+    public Color getLine() {
+        return lineColor;
+    }
 
     @Override
     public void moveFigure(double diffX, double diffY) {
         centerPoint.movePoint(diffX,diffY);
+    }
+
+    @Override
+    public boolean figureBelongsIn(Rectangle rectangle){
+        Point topPoint=centerPoint;
+        Point bottomPoint=centerPoint;
+        Point leftPoint = centerPoint;
+        Point rightPoint=centerPoint;
+        rightPoint.movePoint(radius,0);
+        leftPoint.movePoint(-radius,0);
+        bottomPoint.movePoint(0,-radius);
+        topPoint.movePoint(0,radius);
+        return rectangle.figureBelongs(topPoint) && rectangle.figureBelongs(bottomPoint) && rectangle.figureBelongs(leftPoint) && rectangle.figureBelongs(rightPoint);
     }
 }

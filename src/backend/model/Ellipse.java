@@ -11,6 +11,7 @@ public class Ellipse extends Rectangle{
     public Ellipse(Point topLeft, Point bottomRight){
         super(topLeft,bottomRight);
     }
+    private Color fillColor, lineColor;
 
     @Override
     public boolean figureBelongs(Point eventPoint) {
@@ -43,9 +44,30 @@ public class Ellipse extends Rectangle{
     }
 
     @Override
-    public GraphicsContext setStrokeAndFill(GraphicsContext gc) {
+    public GraphicsContext setStrokeAndFill(GraphicsContext gc, Color fillColor, Color strokeColor) {
+        gc.setFill(fillColor);
+        gc.setStroke(strokeColor);
         gc.fillOval(getWidth(),getHeight(),getAxisMay(),getAxisMen());
         gc.strokeOval(getWidth(),getHeight(),getAxisMay(),getAxisMen());
         return gc;
+    }
+    @Override
+    public void setFillColor(Color fillColor) {
+        this.fillColor = fillColor;
+    }
+
+    @Override
+    public void setStrokeColor(Color lineColor) {
+        this.lineColor = lineColor;
+    }
+
+    @Override
+    public Color getFill() {
+        return fillColor;
+    }
+
+    @Override
+    public Color getLine() {
+        return lineColor;
     }
 }

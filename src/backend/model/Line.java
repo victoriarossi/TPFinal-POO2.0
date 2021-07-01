@@ -5,6 +5,8 @@ import javafx.scene.paint.Color;
 
 public class Line extends Rectangle{
 
+    private Color lineColor;
+
     public Line(Point firstPoint, Point secondPoint){
         super(firstPoint,secondPoint);
     }
@@ -20,9 +22,18 @@ public class Line extends Rectangle{
     }
 
     @Override
-    public GraphicsContext setStrokeAndFill(GraphicsContext gc) {
+    public GraphicsContext setStrokeAndFill(GraphicsContext gc, Color fillColor, Color strokeColor) {
+        gc.setStroke(strokeColor);
         gc.strokeLine(getTopLeft().getX(),getTopLeft().getY(),getBottomRight().getX(),getBottomRight().getY());
         return gc;
     }
+    @Override
+    public void setStrokeColor(Color lineColor) {
+        this.lineColor = lineColor;
+    }
 
+    @Override
+    public Color getLine() {
+        return lineColor;
+    }
 }
