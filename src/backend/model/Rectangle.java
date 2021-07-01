@@ -57,4 +57,5 @@ public class Rectangle extends Figure {
         topLeft.movePoint(diffX,diffY);
         bottomRight.movePoint(diffX,diffY);
     }
+
 }

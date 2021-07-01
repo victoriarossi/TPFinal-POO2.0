@@ -2,18 +2,17 @@ package frontend;
 
 import backend.CanvasState;
 import backend.model.*;
-import javafx.event.ActionEvent;
-import javafx.event.Event;
 import javafx.event.EventHandler;
 import javafx.geometry.Insets;
 import javafx.scene.Cursor;
 import javafx.scene.canvas.Canvas;
 import javafx.scene.canvas.GraphicsContext;
 import javafx.scene.control.*;
+import javafx.scene.input.MouseEvent;
 import javafx.scene.layout.BorderPane;
 import javafx.scene.layout.VBox;
 import javafx.scene.paint.Color;
-import javafx.scene.shape.FillRule;
+
 
 public class PaintPane extends BorderPane {
 
@@ -33,6 +32,7 @@ public class PaintPane extends BorderPane {
 	ToggleButton ellipseButton = new ToggleButton("Elipse");
 	ToggleButton squareButton = new ToggleButton("Cuadrado");
 	ToggleButton lineButton = new ToggleButton("Linea");
+	ToggleButton deleteButton = new ToggleButton("Borrar");
 	Slider slider = new Slider(1, 50, 1);
 	Label thick = new Label("Borde:");
 	Label color = new Label("Relleno:");
@@ -50,7 +50,7 @@ public class PaintPane extends BorderPane {
 	public PaintPane(CanvasState canvasState, StatusPane statusPane) {
 		this.canvasState = canvasState;
 		this.statusPane = statusPane;
-		ToggleButton[] toolsArr = {selectionButton, rectangleButton, circleButton, ellipseButton, squareButton, lineButton };
+		ToggleButton[] toolsArr = {selectionButton, rectangleButton, circleButton, ellipseButton, squareButton, lineButton,deleteButton };
 		ToggleGroup tools = new ToggleGroup();
 		for (ToggleButton tool : toolsArr) {
 			tool.setMinWidth(90);
@@ -59,15 +59,11 @@ public class PaintPane extends BorderPane {
 		}
 		VBox buttonsBox = new VBox(10);
 		buttonsBox.getChildren().addAll(toolsArr);
-		buttonsBox.getChildren().add(thick);
 		slider.setShowTickMarks(true);
 		slider.setShowTickLabels(true);
-		buttonsBox.getChildren().add(slider);
 		colorPickerThick.getStyleClass().add("split-button");
-		buttonsBox.getChildren().add(colorPickerThick);
-		buttonsBox.getChildren().add(color);
 		colorPickerFill.getStyleClass().add("split-button");
-		buttonsBox.getChildren().add(colorPickerFill);
+		buttonsBox.getChildren().addAll(thick, slider, colorPickerThick, color, colorPickerFill);
 		buttonsBox.setPadding(new Insets(5));
 		buttonsBox.setStyle("-fx-background-color: #999");
 		buttonsBox.setPrefWidth(100);
@@ -110,10 +106,21 @@ public class PaintPane extends BorderPane {
 			if (selectionButton.isSelected()) {
 				Point eventPoint = new Point(event.getX(), event.getY());
 				StringBuilder label = new StringBuilder("Se seleccionó: ");
-				checkingFigureBelongs(eventPoint,label,"Ninguna figura encontrada");
+				Figure myFigure = checkingFigureBelongs(eventPoint,label,"Ninguna figura encontrada");
 				redrawCanvas();
+				EventHandler<? super MouseEvent> releasedEvent =canvas.getOnMouseReleased();
+				canvas.setOnMousePressed(newEvent -> {
+					if (deleteButton.isSelected() && myFigure!=null){
+						canvasState.deleteFigure(myFigure);
+						canvas.setOnMouseReleased(newerEvent -> {
+							redrawCanvas();
+						});
+					}
+				});
+				canvas.setOnMouseReleased(releasedEvent);
 			}
 		});
+
 		canvas.setOnMouseDragged(event -> {
 			if (selectionButton.isSelected()) {
 				Point eventPoint = new Point(event.getX(), event.getY());
@@ -125,16 +132,17 @@ public class PaintPane extends BorderPane {
 		});
 		setLeft(buttonsBox);
 		setRight(canvas);
-		setStrokeAndLine();
 	}
 
-	private void checkingFigureBelongs(Point eventPoint , StringBuilder label, String elseString){
+	private Figure checkingFigureBelongs(Point eventPoint , StringBuilder label, String elseString){
 		boolean found = false;
+		Figure toReturn=null;
 		for (Figure figure : canvasState.figures()) {
 			if (figure.figureBelongs(eventPoint)) {
 				found=true;
 				selectedFigure = figure;
 				label.append(figure.toString());
+				toReturn=figure;
 			}
 		}
 		if(!found){
@@ -142,6 +150,7 @@ public class PaintPane extends BorderPane {
 		}else {
 			statusPane.updateStatus(label.toString());
 		}
+		return toReturn;
 	}
 
 	void redrawCanvas() {
@@ -156,12 +165,5 @@ public class PaintPane extends BorderPane {
 			gc = figure.setStrokeAndFill(gc);
 		}
 	}
-	private void setStrokeAndLine(){
-		for (Figure figure : canvasState.figures()) {
-			if (figure == selectedFigure) {
-				figure.setStrokeAndFill(gc).setFill(colorPickerFill.getValue());
-				figure.setStrokeAndFill(gc).setStroke(colorPickerThick.getValue());
-			}
-		}
-	}
+
 }
