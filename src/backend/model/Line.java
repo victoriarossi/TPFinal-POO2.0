@@ -10,7 +10,7 @@ public class Line extends Rectangle{
         super(firstPoint,secondPoint);
     }
 
-    @Override
+
     public double getHeight() {
         return 0;
     }
