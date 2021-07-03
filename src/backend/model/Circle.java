@@ -49,9 +49,7 @@ public class Circle extends Ellipse {
 
     @Override
     public GraphicsContext setStrokeAndFill(GraphicsContext gc, Color fillColor, Color strokeColor, double thick) {
-        gc.setFill(fillColor);
-        gc.setStroke(strokeColor);
-        gc.setLineWidth(thick);
+        setStrokeFillAndThick(gc,strokeColor,fillColor,thick);
         gc.fillOval(getWidth(),getHeight(),getDiameter(),getDiameter());
         gc.strokeOval(getWidth(),getHeight(),getDiameter(),getDiameter());
         return gc;

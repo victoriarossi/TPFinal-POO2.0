@@ -64,9 +64,7 @@ public class Ellipse extends Figure{
 
     @Override
     public GraphicsContext setStrokeAndFill(GraphicsContext gc, Color fillColor, Color strokeColor, double thick) {
-        gc.setFill(fillColor);
-        gc.setStroke(strokeColor);
-        gc.setLineWidth(thick);
+        setStrokeFillAndThick(gc,strokeColor,fillColor,thick);
         gc.fillOval(topLeft.getX(), topLeft.getY(), axisX,axisY);
         gc.strokeOval(topLeft.getX(), topLeft.getY(),axisX,axisY);
         return gc;

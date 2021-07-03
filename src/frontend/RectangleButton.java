@@ -16,9 +16,7 @@ public class RectangleButton extends FigureButtons {
         if (endPoint.validatePoint(startPoint)){
             return new Rectangle(startPoint, endPoint);
         }
-        else{
-            setAlert("Rectangulo");
-        }
+        setAlert("Rectangulo");
         return null;
     }
 

@@ -8,10 +8,14 @@ import javafx.scene.control.ToggleButton;
 public abstract class FigureButtons {
     private final ToggleButton button;
 
+    //Le asigno a cada figura el boton que le corresponde
     public FigureButtons(ToggleButton button){
         this.button=button;
     }
+
+    //Creo la figura correspondiente y en caso de no podes crearla lanzo la alerta
     public abstract Figure activate(Point startPoint, Point endPoint);
+
     public ToggleButton getButton(){
         return button;
     }

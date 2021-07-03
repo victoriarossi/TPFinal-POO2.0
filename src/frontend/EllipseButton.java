@@ -16,9 +16,7 @@ public class EllipseButton extends FigureButtons{
         if (endPoint.validatePoint(startPoint)){
             return new Ellipse(startPoint, endPoint);
         }
-        else{
-            setAlert("Elipse");
-        }
+        setAlert("Elipse");
         return null;
     }
 }

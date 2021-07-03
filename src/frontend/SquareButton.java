@@ -15,9 +15,7 @@ public class SquareButton extends FigureButtons{
         if (endPoint.validatePoint(startPoint)){
             return new Square(startPoint, endPoint);
         }
-        else{
-            setAlert("Cuadrado");
-        }
+        setAlert("Cuadrado");
         return null;
     }
 }

@@ -21,12 +21,15 @@ public class CanvasState {
         return list;
     }
 
+    //Agregamos al final de la lista las figuras que se quiere mover hacia adelante
     public void moveToFront(List<Figure> figures){
         for(Figure figure: figures) {
             list.remove(figure);
             list.offerLast(figure);
         }
     }
+
+    //Agregamos al principio de la lista las figuras que se quiere mover hacia atras
     public void moveToBack(List<Figure> figures){
         for(Figure figure : figures){
             list.remove(figure);

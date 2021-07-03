@@ -29,17 +29,16 @@ public class Rectangle extends Figure {
     }
 
     public Point getBottomRight(){return bottomRight;}
+
     @Override
     public boolean figureBelongs(Point eventPoint) {
-        return eventPoint.getX() > topLeft.getX() && eventPoint.getX() < bottomRight.getX() &&
-                eventPoint.getY() > topLeft.getY() && eventPoint.getY() < bottomRight.getY();
+        return eventPoint.getX() >= topLeft.getX() && eventPoint.getX() <= bottomRight.getX() &&
+                eventPoint.getY() >= topLeft.getY() && eventPoint.getY() <= bottomRight.getY();
     }
 
     @Override
     public GraphicsContext setStrokeAndFill(GraphicsContext gc, Color fillColor, Color strokeColor, double thick) {
-        gc.setFill(fillColor);
-        gc.setStroke(strokeColor);
-        gc.setLineWidth(thick);
+        setStrokeFillAndThick(gc,strokeColor,fillColor,thick);
         gc.fillRect(topLeft.getX(), topLeft.getY(), getWidth(),getHeight());
         gc.strokeRect(topLeft.getX(), topLeft.getY(), getWidth(),getHeight());
         return gc;

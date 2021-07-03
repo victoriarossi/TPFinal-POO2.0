@@ -14,9 +14,8 @@ public class CircleButton extends FigureButtons{
     public Figure activate(Point startPoint, Point endPoint) {
         if (endPoint.validatePoint(startPoint)){
             return new Circle(startPoint, endPoint);
-        }else{
-            setAlert("Circulo");
         }
+        setAlert("Circulo");
         return null;
     }
 
