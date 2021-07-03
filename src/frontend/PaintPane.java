@@ -2,14 +2,11 @@ package frontend;
 
 import backend.CanvasState;
 import backend.model.*;
-import javafx.event.EventHandler;
 import javafx.geometry.Insets;
 import javafx.scene.Cursor;
-import javafx.scene.Node;
 import javafx.scene.canvas.Canvas;
 import javafx.scene.canvas.GraphicsContext;
 import javafx.scene.control.*;
-import javafx.scene.input.MouseEvent;
 import javafx.scene.layout.BorderPane;
 import javafx.scene.layout.VBox;
 import javafx.scene.paint.Color;
@@ -48,9 +45,6 @@ public class PaintPane extends BorderPane {
 	Point startPoint;
 	Point endPoint;
 
-	//Selecionar Varias figuras en rectangulo
-	Point selectedStartPoint, selectedEndPoint;
-
 	// Seleccion de figuras
 	List<Figure> selectedFigure = new ArrayList<>();
 
@@ -63,7 +57,7 @@ public class PaintPane extends BorderPane {
 		ToggleButton[] toolsArr = {selectionButton, rectangleButton, circleButton, ellipseButton, squareButton, lineButton, deleteButton, toFront,toBack};
 		FigureButtons[] figureButtons={new RectangleButton(rectangleButton), new CircleButton(circleButton),
             new SquareButton(squareButton), new LineButton(lineButton), new EllipseButton(ellipseButton)};
-//
+
 		ToggleGroup tools = new ToggleGroup();
 		for (ToggleButton tool : toolsArr) {
 			tool.setMinWidth(90);
@@ -104,7 +98,7 @@ public class PaintPane extends BorderPane {
 
 		canvas.setOnMouseMoved(event -> {
 			Point eventPoint = new Point(event.getX(), event.getY());
-			statusPane.updateStatus("Point:"+ eventPoint.toString());
+			statusPane.updateStatus(eventPoint.toString());
 			for (Figure figure : selectedFigure) {
 				StringBuilder label = new StringBuilder();
 				checkingFigureBelongs(figure, label, eventPoint.toString());
@@ -113,7 +107,11 @@ public class PaintPane extends BorderPane {
 
 		canvas.setOnMouseClicked(event -> {
 			if (selectionButton.isSelected()) {
-				selectedFigure.clear();
+				Point eventPoint = new Point(event.getX(), event.getY());
+				//Si el punto donde hago click no pertenece a una de las figuras, reinicio lo seleccionado
+				if(!eventPoint.belongsIn(selectedFigure)){
+					selectedFigure.clear();
+				}
 				Rectangle selectedRectangle = new Rectangle(startPoint, endPoint);
 				searchingFigures(selectedRectangle);
 				StringBuilder label = new StringBuilder("Se seleccionó: ");

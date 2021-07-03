@@ -25,13 +25,13 @@ public class CanvasState {
     public void moveToFront(List<Figure> figures){
         for(Figure figure: figures) {
             list.remove(figure);
-            list.offerFirst(figure);
+            list.offerLast(figure);
         }
     }
     public void moveToBack(List<Figure> figures){
         for(Figure figure : figures){
             list.remove(figure);
-            list.offerLast(figure);
+            list.offerFirst(figure);
         }
     }
 }

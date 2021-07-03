@@ -1,5 +1,7 @@
 package backend.model;
 
+import java.util.List;
+
 public class Point {
 
     private double x, y;
@@ -48,5 +50,14 @@ public class Point {
         }
         Point point = (Point) other;
         return x == point.getX() && y == point.getY();
+    }
+
+    public boolean belongsIn(List<Figure> selectedFigures){
+        for(Figure figure : selectedFigures){
+            if(figure.figureBelongs(this)){
+                return true;
+            }
+        }
+        return false;
     }
 }
