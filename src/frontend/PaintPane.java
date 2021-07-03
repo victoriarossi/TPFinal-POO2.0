@@ -25,6 +25,7 @@ public class PaintPane extends BorderPane {
 	GraphicsContext gc = canvas.getGraphicsContext2D();
 	private static final Color strokeColor = Color.BLACK;
 	private static final Color fillColor = Color.YELLOW;
+	private static final Color SelectedColor = Color.RED;
 
 	// Botones Barra Izquierda
 	ToggleButton selectionButton = new ToggleButton("Seleccionar");
@@ -115,8 +116,9 @@ public class PaintPane extends BorderPane {
 				StringBuilder label = new StringBuilder("Se seleccionó: ");
 				for (Figure figure : selectedFigure) {
 					checkingFigureBelongs(figure, label, "Ninguna figura encontrada");
-					redrawCanvas();
+
 				}
+				redrawCanvas();
 			}
 		});
 
@@ -191,10 +193,12 @@ public class PaintPane extends BorderPane {
 		gc.clearRect(0, 0, canvas.getWidth(), canvas.getHeight());
 		for (Figure figure : canvasState.figures()) {
 			if (selectedFigure.contains(figure)) {
-				gc.setStroke(Color.RED);
-				gc.setFill(fillColor);
+
+				gc = figure.setStrokeAndFill(gc, figure.getFill(), SelectedColor, figure.getThickness());
 			}
+			else{
 			gc = figure.setStrokeAndFill(gc, figure.getFill(), figure.getLine(), figure.getThickness());
+		}
 		}
 	}
 
