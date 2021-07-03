@@ -82,4 +82,16 @@ public class Ellipse extends Figure{
         return rectangle.figureBelongs(topPoint) && rectangle.figureBelongs(bottomPoint) && rectangle.figureBelongs(leftPoint) && rectangle.figureBelongs(rightPoint);
     }
 
+    @Override
+    public boolean equals(Object other){
+        if(this == other){
+            return true;
+        }
+        if(!(other instanceof Ellipse)){
+            return false;
+        }
+        Ellipse ellipse = (Ellipse) other;
+        return centerPoint.equals(ellipse.getCenterPoint()) && axisX == ellipse.getAxisX() && axisY == ellipse.getAxisY();
+    }
+
 }

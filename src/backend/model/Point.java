@@ -37,4 +37,16 @@ public class Point {
     public double getDiffY(Point p2){
         return (y-p2.getY())/100;
     }
+
+    @Override
+    public boolean equals(Object other){
+        if(this == other){
+            return true;
+        }
+        if(!(other instanceof Point)){
+            return false;
+        }
+        Point point = (Point) other;
+        return x == point.getX() && y == point.getY();
+    }
 }
