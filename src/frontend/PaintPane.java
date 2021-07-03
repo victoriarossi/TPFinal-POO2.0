@@ -23,8 +23,8 @@ public class PaintPane extends BorderPane {
 	// Canvas y relacionados
 	Canvas canvas = new Canvas(800, 600);
 	GraphicsContext gc = canvas.getGraphicsContext2D();
-	private static Color strokeColor = Color.BLACK;
-	private static Color fillColor = Color.YELLOW;
+	private static final Color strokeColor = Color.BLACK;
+	private static final Color fillColor = Color.YELLOW;
 
 	// Botones Barra Izquierda
 	ToggleButton selectionButton = new ToggleButton("Seleccionar");
@@ -75,9 +75,7 @@ public class PaintPane extends BorderPane {
 		buttonsBox.setStyle("-fx-background-color: #999");
 		buttonsBox.setPrefWidth(100);
 		gc.setLineWidth(1);
-		canvas.setOnMousePressed(event -> {
-			startPoint = new Point(event.getX(), event.getY());
-		});
+		canvas.setOnMousePressed(event -> { startPoint = new Point(event.getX(), event.getY()); });
 		canvas.setOnMouseReleased(event -> {
 			endPoint = new Point(event.getX(), event.getY());
 			Figure newFigure = null;
@@ -86,7 +84,7 @@ public class PaintPane extends BorderPane {
 					newFigure = figure.activate(startPoint, endPoint);
 				}
 			}
-			if(!selectionButton.isSelected()) {
+			if(!selectionButton.isSelected() && newFigure!=null) {
 				newFigure.setFillColor(colorPickerFill.getValue());
 				newFigure.setStrokeColor(colorPickerThick.getValue());
 				newFigure.setThickness(slider.getValue());
@@ -141,7 +139,7 @@ public class PaintPane extends BorderPane {
 			redrawCanvas();
 		});
 
-		deleteButton.setOnMousePressed(event -> {
+		deleteButton.setOnMouseClicked(event -> {
 			for (Figure figure : selectedFigure) {
 				canvasState.deleteFigure(figure);
 			}
@@ -195,9 +193,6 @@ public class PaintPane extends BorderPane {
 			if (selectedFigure.contains(figure)) {
 				gc.setStroke(Color.RED);
 				gc.setFill(fillColor);
-//				figure.setFillColor(colorPickerFill.getValue());
-//				figure.setStrokeColor(colorPickerThick.getValue());
-//				figure.setThickness(slider.getValue());
 			}
 			gc = figure.setStrokeAndFill(gc, figure.getFill(), figure.getLine(), figure.getThickness());
 		}
