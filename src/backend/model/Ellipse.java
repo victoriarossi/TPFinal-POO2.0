@@ -8,8 +8,10 @@ import javafx.scene.paint.Color;
 //        que encierra a la elipse.
 public class Ellipse extends Figure{
 
-    private Point centerPoint,topLeft;
-    private double axisX, axisY;
+    private final Point centerPoint;
+    private final Point topLeft;
+    private final double axisX;
+    private final double axisY;
 
     public Ellipse(Point topLeft, Point bottomRight){
         this.topLeft=topLeft;

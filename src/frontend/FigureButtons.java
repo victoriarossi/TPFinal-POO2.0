@@ -5,7 +5,7 @@ import backend.model.Point;
 import javafx.scene.control.ToggleButton;
 
 public abstract class FigureButtons {
-    private ToggleButton button;
+    private final ToggleButton button;
 
     public FigureButtons(ToggleButton button){
         this.button=button;

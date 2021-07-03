@@ -1,8 +1,5 @@
 package backend.model;
 
-import backend.model.Point;
-import backend.model.Rectangle;
-import javafx.scene.Node;
 import javafx.scene.canvas.GraphicsContext;
 
 import javafx.scene.paint.Color;
