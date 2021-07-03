@@ -112,6 +112,9 @@ public class PaintPane extends BorderPane {
 					selectedFigure.clear();
 				}
 				Rectangle selectedRectangle = new Rectangle(startPoint, endPoint);
+				if (selectedRectangle == null){
+					setAlert();
+				}
 				searchingFigures(selectedRectangle);
 				StringBuilder label = new StringBuilder("Se seleccionó: ");
 				for (Figure figure : selectedFigure) {
@@ -208,5 +211,12 @@ public class PaintPane extends BorderPane {
 				selectedFigure.add(figure);
 			}
 		}
+	}
+	public void setAlert(){
+		Alert alert = new Alert(Alert.AlertType.INFORMATION);
+		alert.setTitle("ATENCION");
+		alert.setHeaderText("Error de seleccion");
+		alert.setContentText("La seleccion debe ser dibujada de arriba a abajo y de izquierda a derecha");
+		alert.showAndWait();
 	}
 }
