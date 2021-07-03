@@ -2,6 +2,7 @@ package backend.model;
 
 import backend.model.Point;
 import backend.model.Rectangle;
+import javafx.scene.Node;
 import javafx.scene.canvas.GraphicsContext;
 
 import javafx.scene.paint.Color;
@@ -13,7 +14,6 @@ public abstract class Figure{
     private Color fillColor, lineColor;
 
     private double thick;
-
 
     public abstract void moveFigure(double diffX, double diffY);
 
@@ -46,4 +46,5 @@ public abstract class Figure{
     public double getThickness() {
         return thick;
     }
+
 }

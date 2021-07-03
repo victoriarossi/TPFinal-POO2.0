@@ -19,7 +19,7 @@ public class AppLauncher extends Application {
 		primaryStage.setResizable(false);
 		primaryStage.setScene(scene);
 		primaryStage.show();
-		primaryStage.setOnCloseRequest(event -> System.exit(-1));
+		primaryStage.setOnCloseRequest(event -> System.exit(0));
 	}
 
 }

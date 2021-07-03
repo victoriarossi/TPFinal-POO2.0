@@ -9,28 +9,26 @@ public class Rectangle extends Figure {
 
     public Rectangle(Point topLeft, Point bottomRight) {
         this.topLeft = topLeft;
-        this.bottomRight = bottomRight;
+        this.bottomRight = setBottomRight(bottomRight);
     }
 
     public Point getTopLeft() {
         return topLeft;
     }
 
-    public Point getBottomRight() {
+    protected Point setBottomRight(Point bottomRight) {
         return bottomRight;
     }
-
-
 
     public double getWidth(){
         return Math.abs(topLeft.getX() - bottomRight.getX());
     }
 
-
     public double getHeight(){
         return Math.abs(topLeft.getY() - bottomRight.getY());
     }
 
+    public Point getBottomRight(){return bottomRight;}
     @Override
     public boolean figureBelongs(Point eventPoint) {
         return eventPoint.getX() > topLeft.getX() && eventPoint.getX() < bottomRight.getX() &&
@@ -46,7 +44,6 @@ public class Rectangle extends Figure {
         gc.strokeRect(topLeft.getX(), topLeft.getY(), getWidth(),getHeight());
         return gc;
     }
-
 
     @Override
     public String toString() {
@@ -64,4 +61,15 @@ public class Rectangle extends Figure {
         return rectangle.figureBelongs(topLeft) && rectangle.figureBelongs(bottomRight);
     }
 
+    @Override
+    public boolean equals(Object other){
+        if(this == other){
+            return true;
+        }
+        if(!(other instanceof Rectangle)){
+            return false;
+        }
+        Rectangle rect = (Rectangle) other;
+        return topLeft.equals(rect.getTopLeft()) && bottomRight.equals(rect.getTopLeft());
+    }
 }
