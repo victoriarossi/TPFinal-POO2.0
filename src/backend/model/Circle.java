@@ -57,6 +57,4 @@ public class Circle extends Ellipse {
         return gc;
     }
 
-
-
 }

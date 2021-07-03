@@ -38,6 +38,7 @@ public class Ellipse extends Figure{
     @Override
     public void moveFigure(double diffX, double diffY) {
         centerPoint.movePoint(diffX,diffY);
+        topLeft.movePoint(diffX, diffY);
     }
 
     public double getAxisX(){
