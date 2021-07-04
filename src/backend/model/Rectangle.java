@@ -33,7 +33,6 @@ public class Rectangle extends Figure {
     }
 
 
-
     @Override
     public GraphicsContext setStrokeAndFill(GraphicsContext gc, Color fillColor, Color strokeColor, double thick) {
         setStrokeFillAndThick(gc,strokeColor,fillColor,thick);

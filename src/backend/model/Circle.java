@@ -3,6 +3,7 @@ package backend.model;
 import javafx.scene.canvas.GraphicsContext;
 import javafx.scene.paint.Color;
 
+
 public class Circle extends Ellipse {
 
     public Circle(Point topLeft, Point bottomRight) {
@@ -39,7 +40,7 @@ public class Circle extends Ellipse {
     @Override
     public boolean figureBelongs(Point eventPoint) {
         return Math.sqrt(Math.pow(getCenterPoint().getX() - eventPoint.getX(), 2) +
-                Math.pow(getCenterPoint().getY() - eventPoint.getY(), 2)) <= getAxisX();
+                Math.pow(getCenterPoint().getY() - eventPoint.getY(), 2)) < getAxisX();
     }
 
     @Override

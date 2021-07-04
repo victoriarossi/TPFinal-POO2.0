@@ -180,6 +180,8 @@ public class PaintPane extends BorderPane {
 
 	private void mousePressed(MouseEvent event) {
 		startPoint = new Point(event.getX(), event.getY());
+		//Reinicio la seleccion si hago click en un punto que no pertenece a la/s figura/s seleccionada/s
+		cleanSelectedFigures(startPoint);
 	}
 
 	private void mouseMoved(MouseEvent event){
@@ -201,9 +203,7 @@ public class PaintPane extends BorderPane {
 			}
 
 			//Reinicio la seleccion si suelto el mouse por fuera de las figuras seleccionadas
-			if(!endPoint.belongsIn(selectedFigure)){
-				selectedFigure.clear();
-			}
+			cleanSelectedFigures(endPoint);
 
 			//Seleccion por medio de un rectangulo
 			Rectangle selectedRectangle = new Rectangle(startPoint, endPoint);
@@ -272,6 +272,12 @@ public class PaintPane extends BorderPane {
 		alert.setHeaderText("Error de seleccion");
 		alert.setContentText("La seleccion debe ser dibujada de arriba a abajo y de izquierda a derecha");
 		alert.showAndWait();
+	}
+
+	private void cleanSelectedFigures(Point point){
+		if(!point.belongsIn(selectedFigure)){
+			selectedFigure.clear();
+		}
 	}
 
 }
