@@ -29,7 +29,7 @@ public class Square extends Rectangle {
         if(this == other){
             return true;
         }
-        if(!(other instanceof Rectangle)){
+        if(!(other instanceof Square)){
             return false;
         }
         Square square = (Square) other;
