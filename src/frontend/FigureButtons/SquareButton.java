@@ -1,11 +1,11 @@
-package frontend;
+package frontend.FigureButtons;
 
 import backend.model.Figure;
 import backend.model.Point;
 import backend.model.Square;
 import javafx.scene.control.ToggleButton;
 
-public class SquareButton extends FigureButtons{
+public class SquareButton extends FigureButtons {
     public SquareButton(ToggleButton button) {
         super(button);
     }

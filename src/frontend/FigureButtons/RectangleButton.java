@@ -1,4 +1,4 @@
-package frontend;
+package frontend.FigureButtons;
 
 import backend.model.Figure;
 import backend.model.Point;

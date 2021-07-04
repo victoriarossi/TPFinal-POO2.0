@@ -1,4 +1,4 @@
-package frontend;
+package frontend.FigureButtons;
 
 import backend.model.Figure;
 import backend.model.Point;
@@ -13,7 +13,7 @@ public abstract class FigureButtons {
         this.button=button;
     }
 
-    //Creo la figura correspondiente y en caso de no podes crearla lanzo la alerta
+    //Creo la figura correspondiente y en caso de no poder crearla lanzo la alerta
     public abstract Figure activate(Point startPoint, Point endPoint);
 
     public ToggleButton getButton(){

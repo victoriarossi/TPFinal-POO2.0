@@ -10,8 +10,8 @@ public class Line extends Rectangle{
         super(firstPoint,secondPoint);
     }
 
-
-    public double getHeight() {
+    //Las lineas no tienen relleno por lo que su ancho es nulo
+    public double getWidth() {
         return 0;
     }
 

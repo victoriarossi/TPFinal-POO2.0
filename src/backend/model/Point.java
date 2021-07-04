@@ -23,11 +23,6 @@ public class Point {
         return y;
     }
 
-    @Override
-    public String toString() {
-        return String.format("{%.2f , %.2f}", x, y);
-    }
-
     public boolean validatePoint(Point startPoint){
         return !(startPoint == null || x < startPoint.getX() || y < startPoint.getY());
     }
@@ -38,6 +33,11 @@ public class Point {
 
     public double getDiffY(Point p2){
         return (y-p2.getY())/100;
+    }
+
+    @Override
+    public String toString() {
+        return String.format("{%.2f , %.2f}", x, y);
     }
 
     @Override

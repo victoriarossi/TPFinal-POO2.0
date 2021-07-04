@@ -10,7 +10,7 @@ public class Circle extends Ellipse {
     }
 
     @Override
-    public Point getCenter(Point topLeft, Point bottomRight){
+    public Point setCenter(Point topLeft, Point bottomRight){
         return topLeft;
     }
 
@@ -24,27 +24,22 @@ public class Circle extends Ellipse {
         return setAxisX(topLeft, bottomRight);
     }
 
-    @Override
-    public String toString() {
-        return String.format("Círculo [Centro: %s, Radio: %.2f]", getCenterPoint(), getAxisX());
-    }
-
-    public double getDiameter(){return getAxisX()*2;}
-
-
+    //Le doy un ancho
     public double getWidth(){
         return getCenterPoint().getX() - getAxisX();
     }
 
-
+    //Le doy una altura
     public double getHeight(){
         return getCenterPoint().getY() - getAxisX();
     }
 
+    public double getDiameter(){return getAxisX()*2;}
+
     @Override
     public boolean figureBelongs(Point eventPoint) {
         return Math.sqrt(Math.pow(getCenterPoint().getX() - eventPoint.getX(), 2) +
-                Math.pow(getCenterPoint().getY() - eventPoint.getY(), 2)) < getAxisX();
+                Math.pow(getCenterPoint().getY() - eventPoint.getY(), 2)) <= getAxisX();
     }
 
     @Override
@@ -55,4 +50,20 @@ public class Circle extends Ellipse {
         return gc;
     }
 
+    @Override
+    public String toString() {
+        return String.format("Círculo [Centro: %s, Radio: %.2f]", getCenterPoint(), getAxisX());
+    }
+
+    @Override
+    public boolean equals(Object other){
+        if(this == other){
+            return true;
+        }
+        if(!(other instanceof Circle)){
+            return false;
+        }
+        Circle circle = (Circle) other;
+        return getCenterPoint().equals(circle.getCenterPoint()) && getAxisX() == circle.getAxisX() && getAxisY() == circle.getAxisY();
+    }
 }

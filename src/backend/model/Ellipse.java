@@ -15,30 +15,18 @@ public class Ellipse extends Figure{
 
     public Ellipse(Point topLeft, Point bottomRight){
         this.topLeft=topLeft;
-        this.centerPoint=getCenter(topLeft,bottomRight);
         this.axisX=setAxisX(topLeft, bottomRight);
         this.axisY=setAxisY(topLeft,bottomRight);
+        this.centerPoint=setCenter(topLeft, bottomRight);
     }
 
-    @Override
-    public boolean figureBelongs(Point eventPoint) {
-        return ((Math.pow(Math.abs(eventPoint.getX() - centerPoint.getX()),2))/Math.pow(axisX,2)) +
-                ((Math.pow(Math.abs(eventPoint.getY() - centerPoint.getY()),2))/Math.pow(axisY,2))<= 1;
+    //Setters y getters de las axisas de una elipse
+    public double setAxisX(Point topLeft, Point bottomRight){
+        return Math.abs(topLeft.getX() - bottomRight.getX());
     }
 
-    public Point getCenter(Point topLeft, Point bottomRight){
-        return new Point(topLeft.getX() + (axisX / 2) , topLeft.getY() +(axisY / 2));
-    }
-
-    @Override
-    public String toString() {
-        return String.format("Elipse [Centro: %s, Eje X: %.2f, Eje Y: %.2f]", centerPoint, axisX, axisY);
-    }
-
-    @Override
-    public void moveFigure(double diffX, double diffY) {
-        centerPoint.movePoint(diffX,diffY);
-        topLeft.movePoint(diffX, diffY);
+    public double setAxisY(Point topLeft, Point bottomRight){
+        return Math.abs(topLeft.getY() - bottomRight.getY());
     }
 
     public double getAxisX(){
@@ -49,17 +37,21 @@ public class Ellipse extends Figure{
         return axisY;
     }
 
+    //Set y get del punto medio
+    public Point setCenter(Point topLeft, Point bottomRight){
+        return new Point(topLeft.getX() + (axisX / 2) , topLeft.getY() +(axisY / 2));
+    }
+
     public Point getCenterPoint(){
         return centerPoint;
     }
 
-    public double setAxisX(Point topLeft, Point bottomRight){
-        return Math.abs(topLeft.getX() - bottomRight.getX());
-    }
 
-
-    public double setAxisY(Point topLeft, Point bottomRight){
-        return Math.abs(topLeft.getY() - bottomRight.getY());
+    //Para mover la figura debo mover cada punto
+    @Override
+    public void moveFigure(double diffX, double diffY) {
+        centerPoint.movePoint(diffX,diffY);
+        topLeft.movePoint(diffX, diffY);
     }
 
     @Override
@@ -81,6 +73,18 @@ public class Ellipse extends Figure{
         bottomPoint.movePoint(0,-axisY);
         topPoint.movePoint(0,axisY);
         return rectangle.figureBelongs(topPoint) && rectangle.figureBelongs(bottomPoint) && rectangle.figureBelongs(leftPoint) && rectangle.figureBelongs(rightPoint);
+    }
+
+    @Override
+    public boolean figureBelongs(Point eventPoint) {
+        return ((Math.pow(Math.abs(eventPoint.getX() - centerPoint.getX()),2))/Math.pow(axisX,2)) +
+                ((Math.pow(Math.abs(eventPoint.getY() - centerPoint.getY()),2))/Math.pow(axisY,2))<= 1;
+    }
+
+
+    @Override
+    public String toString() {
+        return String.format("Elipse [Centro: %s, Eje X: %.2f, Eje Y: %.2f]", centerPoint, axisX, axisY);
     }
 
     @Override

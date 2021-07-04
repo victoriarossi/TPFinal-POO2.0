@@ -20,21 +20,19 @@ public class Rectangle extends Figure {
         return bottomRight;
     }
 
+    public Point getBottomRight(){return bottomRight;}
+
+    //Le doy un ancho
     public double getWidth(){
         return Math.abs(topLeft.getX() - bottomRight.getX());
     }
 
+    //Le doy una altura
     public double getHeight(){
         return Math.abs(topLeft.getY() - bottomRight.getY());
     }
 
-    public Point getBottomRight(){return bottomRight;}
 
-    @Override
-    public boolean figureBelongs(Point eventPoint) {
-        return eventPoint.getX() >= topLeft.getX() && eventPoint.getX() <= bottomRight.getX() &&
-                eventPoint.getY() >= topLeft.getY() && eventPoint.getY() <= bottomRight.getY();
-    }
 
     @Override
     public GraphicsContext setStrokeAndFill(GraphicsContext gc, Color fillColor, Color strokeColor, double thick) {
@@ -45,19 +43,25 @@ public class Rectangle extends Figure {
     }
 
     @Override
-    public String toString() {
-        return String.format("Rectángulo [ %s , %s ]", topLeft, bottomRight);
-    }
-
-    @Override
     public void moveFigure(double diffX, double diffY) {
         topLeft.movePoint(diffX,diffY);
         bottomRight.movePoint(diffX,diffY);
     }
 
     @Override
+    public boolean figureBelongs(Point eventPoint) {
+        return eventPoint.getX() >= topLeft.getX() && eventPoint.getX() <= bottomRight.getX() &&
+                eventPoint.getY() >= topLeft.getY() && eventPoint.getY() <= bottomRight.getY();
+    }
+
+    @Override
     public boolean figureBelongsIn(Rectangle rectangle){
         return rectangle.figureBelongs(topLeft) && rectangle.figureBelongs(bottomRight);
+    }
+
+    @Override
+    public String toString() {
+        return String.format("Rectángulo [ %s , %s ]", topLeft, bottomRight);
     }
 
     @Override

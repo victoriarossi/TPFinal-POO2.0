@@ -2,6 +2,7 @@ package frontend;
 
 import backend.CanvasState;
 import backend.model.*;
+import frontend.FigureButtons.*;
 import javafx.geometry.Insets;
 import javafx.scene.Cursor;
 import javafx.scene.canvas.Canvas;
@@ -18,18 +19,6 @@ import java.util.List;
 
 public class PaintPane extends BorderPane {
 
-	private static final Color strokeColor = Color.BLACK;
-	private static final Color fillColor = Color.YELLOW;
-	private static final Color SelectedColor = Color.RED;
-	private static final int INSETS_VALUE=5;
-	private static final int VBOX_SPACING=10;
-	private static final int LINE_WIDTH=1;
-	private static final int PREF_WIDTH=100;
-	private static final int CANVAS_WIDTH=800;
-	private static final int CANVAS_HEIGHT=600;
-	private static final int SLIDER_MIN=1;
-	private static final int SLIDER_MAX=50;
-	private static final int SLIDER_VALUE=1;
 	// BackEnd
 	CanvasState canvasState;
 
@@ -51,7 +40,7 @@ public class PaintPane extends BorderPane {
 	Slider slider = new Slider(SLIDER_MIN, SLIDER_MAX, SLIDER_VALUE);
 	Label thick = new Label("Borde:");
 	Label color = new Label("Relleno:");
-	ColorPicker colorPickerThick = new ColorPicker(strokeColor);
+	ColorPicker colorPickerStroke = new ColorPicker(strokeColor);
 	ColorPicker colorPickerFill = new ColorPicker(fillColor);
 
 	// Dibujar una figura
@@ -64,12 +53,26 @@ public class PaintPane extends BorderPane {
 	// StatusBar
 	StatusPane statusPane;
 
+	private static final Color strokeColor = Color.BLACK;
+	private static final Color fillColor = Color.YELLOW;
+	private static final Color SelectedColor = Color.RED;
+	private static final int INSETS_VALUE=5;
+	private static final int VBOX_SPACING=10;
+	private static final int LINE_WIDTH=1;
+	private static final int PREF_WIDTH=100;
+	private static final int CANVAS_WIDTH=800;
+	private static final int CANVAS_HEIGHT=600;
+	private static final int SLIDER_MIN=1;
+	private static final int SLIDER_MAX=50;
+	private static final int SLIDER_VALUE=1;
+
 	public PaintPane(CanvasState canvasState, StatusPane statusPane) {
 		this.canvasState = canvasState;
 		this.statusPane = statusPane;
 
 		// Arreglo de botones
-		ToggleButton[] toolsArr = {selectionButton, rectangleButton, circleButton, ellipseButton, squareButton, lineButton, deleteButton, toFront,toBack};
+		ToggleButton[] toolsArr = {selectionButton, rectangleButton, circleButton, ellipseButton, squareButton, lineButton,
+				deleteButton, toFront,toBack};
 
 		// Arreglo de clases que le dan funcionalidad a los botones de figuras
 		FigureButtons[] figureButtons={new RectangleButton(rectangleButton), new CircleButton(circleButton),
@@ -86,9 +89,9 @@ public class PaintPane extends BorderPane {
 		buttonsBox.getChildren().addAll(toolsArr);
 		slider.setShowTickMarks(true);
 		slider.setShowTickLabels(true);
-		colorPickerThick.getStyleClass().add("split-button");
+		colorPickerStroke.getStyleClass().add("split-button");
 		colorPickerFill.getStyleClass().add("split-button");
-		buttonsBox.getChildren().addAll(thick, slider, colorPickerThick, color, colorPickerFill);
+		buttonsBox.getChildren().addAll(thick, slider, colorPickerStroke, color, colorPickerFill);
 		buttonsBox.setPadding(new Insets(INSETS_VALUE));
 		buttonsBox.setStyle("-fx-background-color: #999");
 		buttonsBox.setPrefWidth(PREF_WIDTH);
@@ -112,7 +115,7 @@ public class PaintPane extends BorderPane {
 			//La agrego a mi array de figuras en canvasState
 			if(!selectionButton.isSelected() && newFigure!=null) {
 				newFigure.setFillColor(colorPickerFill.getValue());
-				newFigure.setStrokeColor(colorPickerThick.getValue());
+				newFigure.setStrokeColor(colorPickerStroke.getValue());
 				newFigure.setThickness(slider.getValue());
 				canvasState.addFigure(newFigure);
 				startPoint = null;
@@ -120,7 +123,9 @@ public class PaintPane extends BorderPane {
 			redrawCanvas();
 		});
 
+		//Asignacion de funciones a botones
 
+		//Al soltar el slider setearles el grosor asignado a las figuras seleccionadas
 		slider.setOnMouseReleased(event -> {
 			for (Figure figure : selectedFigure) {
 				figure.setThickness(slider.getValue());
@@ -128,6 +133,7 @@ public class PaintPane extends BorderPane {
 			redrawCanvas();
 		});
 
+		//Al hacer click en el boton "Borrar" eliminar las figuras seleccionadas
 		deleteButton.setOnMouseClicked(event -> {
 			for (Figure figure : selectedFigure) {
 				canvasState.deleteFigure(figure);
@@ -136,9 +142,10 @@ public class PaintPane extends BorderPane {
 
 		});
 
-		colorPickerThick.setOnAction(event -> {
+		//Al seleccionar los colores de relleno y borde setearlo a las figuras seleccionadas
+		colorPickerStroke.setOnAction(event -> {
 			for (Figure figure : selectedFigure) {
-				figure.setStrokeColor(colorPickerThick.getValue());
+				figure.setStrokeColor(colorPickerStroke.getValue());
 			}
 			redrawCanvas();
 		});
@@ -150,12 +157,14 @@ public class PaintPane extends BorderPane {
 			redrawCanvas();
 		});
 
-		toBack.setOnMousePressed(event -> {
+		//Al hacer click en los botones toBack toFront mover las figuras seleccionadas hacia adelante
+		//o hacia atras segun corresponda
+		toBack.setOnMouseClicked(event -> {
 			canvasState.moveToBack(selectedFigure);
 			redrawCanvas();
 		});
 
-		toFront.setOnMousePressed(event ->{
+		toFront.setOnMouseClicked(event ->{
 			canvasState.moveToFront(selectedFigure);
 			redrawCanvas();
 		});
@@ -167,49 +176,6 @@ public class PaintPane extends BorderPane {
 
 		setLeft(buttonsBox);
 		setRight(canvas);
-	}
-
-	private void checkingFigureBelongs(Figure mySelectedFigure, StringBuilder label, String elseString) {
-		boolean found = false;
-		for (Figure figure : canvasState.figures()) {
-			if (figure == mySelectedFigure) {
-				found = true;
-				label.append(figure.toString());
-			}
-		}
-		if (found) {
-			statusPane.updateStatus(label.toString());
-		} else {
-			statusPane.updateStatus(elseString);
-		}
-	}
-
-	private void redrawCanvas() {
-		gc.clearRect(0, 0, canvas.getWidth(), canvas.getHeight());
-		for (Figure figure : canvasState.figures()) {
-			if (selectedFigure.contains(figure)) {
-				gc = figure.setStrokeAndFill(gc, figure.getFill(), SelectedColor, figure.getThickness());
-			}
-			else{
-			gc = figure.setStrokeAndFill(gc, figure.getFill(), figure.getLine(), figure.getThickness());
-		}
-		}
-	}
-
-	//Se encarga de buscar las figuras seleccionadas en rectangle
-	private void searchingFigures(Rectangle rectangle) {
-		for (Figure figure : canvasState.figures()) {
-			if (figure.figureBelongsIn(rectangle)) {
-				selectedFigure.add(figure);
-			}
-		}
-	}
-	private void setAlert(){
-		Alert alert = new Alert(Alert.AlertType.INFORMATION);
-		alert.setTitle("ATENCION");
-		alert.setHeaderText("Error de seleccion");
-		alert.setContentText("La seleccion debe ser dibujada de arriba a abajo y de izquierda a derecha");
-		alert.showAndWait();
 	}
 
 	private void mousePressed(MouseEvent event) {
@@ -229,10 +195,11 @@ public class PaintPane extends BorderPane {
 	private void mouseClicked(MouseEvent event){
 		if (selectionButton.isSelected()) {
 			//Alerta en caso de que la seleccion se realice de derecha a izquierda
-			// o de abajo hacia arriba (Si no hay figuras ya seleccionadas)
-			if (selectedFigure.isEmpty() && !endPoint.validatePoint(startPoint)){
+			// o de abajo hacia arriba
+			if (selectedFigure.isEmpty() && !endPoint.validatePoint(startPoint)) {
 				setAlert();
 			}
+
 			//Reinicio la seleccion si suelto el mouse por fuera de las figuras seleccionadas
 			if(!endPoint.belongsIn(selectedFigure)){
 				selectedFigure.clear();
@@ -252,6 +219,7 @@ public class PaintPane extends BorderPane {
 	private void mouseDragged(MouseEvent event){
 		if (selectionButton.isSelected()) {
 			Point eventPoint = new Point(event.getX(), event.getY());
+			//Arrastro las figuras seleccionadas
 			for (Figure figure : selectedFigure) {
 				figure.moveFigure(eventPoint.getDiffX(startPoint), eventPoint.getDiffY(startPoint));
 			}
@@ -259,5 +227,51 @@ public class PaintPane extends BorderPane {
 		}
 	}
 
+	//Chequeo las figuras seleccionadas y las nombro en el statusPane
+	private void checkingFigureBelongs(Figure mySelectedFigure, StringBuilder label, String elseString) {
+		boolean found = false;
+		for (Figure figure : canvasState.figures()) {
+			if (figure == mySelectedFigure) {
+				found = true;
+				label.append(figure.toString());
+			}
+		}
+		if (found) {
+			statusPane.updateStatus(label.toString());
+		} else {
+			statusPane.updateStatus(elseString);
+		}
+	}
+
+	private void redrawCanvas() {
+		gc.clearRect(0, 0, canvas.getWidth(), canvas.getHeight());
+		for (Figure figure : canvasState.figures()) {
+			if (selectedFigure.contains(figure)) {
+				//Cuando esta seleccionada le asigno un borde selectedColor(ROJO)
+				// y el color que corresponda
+				gc = figure.setStrokeAndFill(gc, figure.getFill(), SelectedColor, figure.getThickness());
+			}
+			else{
+			gc = figure.setStrokeAndFill(gc, figure.getFill(), figure.getStroke(), figure.getThickness());
+		}
+		}
+	}
+
+	//Se encarga de buscar las figuras seleccionadas en rectangle
+	private void searchingFigures(Rectangle rectangle) {
+		for (Figure figure : canvasState.figures()) {
+			if (figure.figureBelongsIn(rectangle)) {
+				selectedFigure.add(figure);
+			}
+		}
+	}
+
+	private void setAlert(){
+		Alert alert = new Alert(Alert.AlertType.INFORMATION);
+		alert.setTitle("ATENCION");
+		alert.setHeaderText("Error de seleccion");
+		alert.setContentText("La seleccion debe ser dibujada de arriba a abajo y de izquierda a derecha");
+		alert.showAndWait();
+	}
 
 }

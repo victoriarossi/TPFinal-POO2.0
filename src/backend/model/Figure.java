@@ -12,21 +12,24 @@ public abstract class Figure{
 
     private double thick;
 
+    //Mueve la figure
     public abstract void moveFigure(double diffX, double diffY);
 
     //Chequea si el punto eventPoint pertenece a la figura
     public abstract boolean figureBelongs(Point eventPoint);
 
-    public abstract GraphicsContext setStrokeAndFill(GraphicsContext gc, Color fillColor, Color strokeColor, double thick);
-
     //Chequea si la figura pertenece al rectangula pasado por parametro
     public abstract boolean figureBelongsIn(Rectangle rectangle);
+
+    //Setters y getters de colores de relleno y bordes
+    public abstract GraphicsContext setStrokeAndFill(GraphicsContext gc, Color fillColor, Color strokeColor, double thick);
 
     public void setStrokeFillAndThick(GraphicsContext gc,Color strokeColor, Color fillColor, double thick){
         gc.setFill(fillColor);
         gc.setStroke(strokeColor);
         gc.setLineWidth(thick);
     }
+
     public void setStrokeColor(Color strokeColor) {
         this.strokeColor = strokeColor;
     }
@@ -39,7 +42,7 @@ public abstract class Figure{
         return fillColor;
     }
 
-    public Color getLine() {
+    public Color getStroke() {
         return strokeColor;
     }
 

@@ -1,6 +1,5 @@
-package frontend;
+package frontend.FigureButtons;
 
-import backend.model.Circle;
 import backend.model.Ellipse;
 import backend.model.Figure;
 import backend.model.Point;
