@@ -76,7 +76,7 @@ public class PaintPane extends BorderPane {
 
 		// Arreglo de clases que le dan funcionalidad a los botones de figuras
 		FigureButtons[] figureButtons={new RectangleButton(rectangleButton), new CircleButton(circleButton),
-            new SquareButton(squareButton), new LineButton(lineButton), new EllipseButton(ellipseButton)};
+				new SquareButton(squareButton), new LineButton(lineButton), new EllipseButton(ellipseButton)};
 
 		ToggleGroup tools = new ToggleGroup();
 		for (ToggleButton tool : toolsArr) {
@@ -252,8 +252,8 @@ public class PaintPane extends BorderPane {
 				gc = figure.setStrokeAndFill(gc, figure.getFill(), SelectedColor, figure.getThickness());
 			}
 			else{
-			gc = figure.setStrokeAndFill(gc, figure.getFill(), figure.getStroke(), figure.getThickness());
-		}
+				gc = figure.setStrokeAndFill(gc, figure.getFill(), figure.getStroke(), figure.getThickness());
+			}
 		}
 	}
 
