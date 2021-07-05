@@ -266,7 +266,7 @@ public class PaintPane extends BorderPane {
 		boolean found = false;
 		for (Figure figure : canvasState.figures()) {
 			if (figure.figureBelongs(eventPoint) && !(figure instanceof Line)) {
-				label.append(figure.toString());
+				label.append(figure);
 				found=true;
 			}
 		}
