@@ -111,6 +111,7 @@ public class PaintPane extends BorderPane {
 					newFigure = figure.activate(startPoint, endPoint);
 				}
 			}
+
 			//Al tener creada la figura le doy relleno y bordes
 			//La agrego a mi array de figuras en canvasState
 			if(!selectionButton.isSelected() && newFigure!=null) {
@@ -122,6 +123,7 @@ public class PaintPane extends BorderPane {
 			}
 			redrawCanvas();
 		});
+
 
 		//Asignacion de funciones a botones
 
@@ -188,13 +190,14 @@ public class PaintPane extends BorderPane {
 		Point eventPoint = new Point(event.getX(), event.getY());
 		statusPane.updateStatus(eventPoint.toString());
 
-		for (Figure figure : selectedFigure) {
+		for (Figure figure : canvasState.figures()) {
 			StringBuilder label = new StringBuilder();
 			checkingFigureBelongs(figure, label, eventPoint.toString());
 		}
 	}
 
 	private void mouseClicked(MouseEvent event){
+		Point eventPoint=new Point(event.getX(), event.getY());
 		if (selectionButton.isSelected()) {
 			//Alerta en caso de que la seleccion se realice de derecha a izquierda
 			// o de abajo hacia arriba
@@ -205,11 +208,20 @@ public class PaintPane extends BorderPane {
 			//Reinicio la seleccion si suelto el mouse por fuera de las figuras seleccionadas
 			cleanSelectedFigures(endPoint);
 
+			//Seleccion mediante click a una figura
+			if(selectedFigure.isEmpty()) {
+				for (Figure figure : canvasState.figures()) {
+					if (figure.figureBelongs(eventPoint) && !(figure instanceof Line)) {
+						selectedFigure.add(figure);
+					}
+				}
+			}
+
 			//Seleccion por medio de un rectangulo
 			Rectangle selectedRectangle = new Rectangle(startPoint, endPoint);
 			searchingFigures(selectedRectangle);
 			StringBuilder label = new StringBuilder("Se seleccionó: ");
-			for (Figure figure : selectedFigure) {
+			for (Figure figure : canvasState.figures()) {
 				checkingFigureBelongs(figure, label, "Ninguna figura encontrada");
 			}
 			redrawCanvas();
@@ -230,7 +242,7 @@ public class PaintPane extends BorderPane {
 	//Chequeo las figuras seleccionadas y las nombro en el statusPane
 	private void checkingFigureBelongs(Figure mySelectedFigure, StringBuilder label, String elseString) {
 		boolean found = false;
-		for (Figure figure : canvasState.figures()) {
+		for (Figure figure : selectedFigure) {
 			if (figure == mySelectedFigure) {
 				found = true;
 				label.append(figure.toString());

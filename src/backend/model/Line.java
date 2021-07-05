@@ -10,9 +10,20 @@ public class Line extends Rectangle{
         super(firstPoint,secondPoint);
     }
 
-    //Las lineas no tienen relleno por lo que su ancho es nulo
-    public double getWidth() {
+    //Las lineas son unicamente un borde
+    public double getHeight() {
         return 0;
+    }
+
+    public double getWidth(){
+        return 0;
+    }
+
+    @Override
+    public boolean figureBelongs(Point eventPoint) {
+//        double m=((getTopLeft().getY() - getBottomRight().getY())/(getTopLeft().getX() - getBottomRight().getX()));
+//        return (eventPoint.getY() - getTopLeft().getY()) == (m*(eventPoint.getX() - getTopLeft().getX()));
+        return true;
     }
 
     @Override
