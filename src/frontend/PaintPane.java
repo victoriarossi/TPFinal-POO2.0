@@ -183,16 +183,19 @@ public class PaintPane extends BorderPane {
 	private void mousePressed(MouseEvent event) {
 		startPoint = new Point(event.getX(), event.getY());
 		//Reinicio la seleccion si hago click en un punto que no pertenece a la/s figura/s seleccionada/s
-		cleanSelectedFigures(startPoint);
+		//Al tener la seleccion activada
+		if(selectionButton.isSelected()){
+			cleanSelectedFigures(startPoint);
+		}
 	}
 
 	private void mouseMoved(MouseEvent event){
 		Point eventPoint = new Point(event.getX(), event.getY());
-		statusPane.updateStatus(eventPoint.toString());
-
-		for (Figure figure : canvasState.figures()) {
-			StringBuilder label = new StringBuilder();
-			checkingFigureBelongs(figure, label, eventPoint.toString());
+		StringBuilder label = new StringBuilder();
+		if(checkingFigureBelongs(eventPoint,label)){
+			statusPane.updateStatus(label.toString());
+		}else{
+			statusPane.updateStatus(eventPoint.toString());
 		}
 	}
 
@@ -221,8 +224,15 @@ public class PaintPane extends BorderPane {
 			Rectangle selectedRectangle = new Rectangle(startPoint, endPoint);
 			searchingFigures(selectedRectangle);
 			StringBuilder label = new StringBuilder("Se seleccionó: ");
+			boolean found=false;
 			for (Figure figure : canvasState.figures()) {
-				checkingFigureBelongs(figure, label, "Ninguna figura encontrada");
+				if(checkingSelectedFigure(figure, label)){
+					found=true;
+					statusPane.updateStatus(label.toString());
+				}
+			}
+			if(!found){
+				statusPane.updateStatus("Ninguna figura encontrada");
 			}
 			redrawCanvas();
 		}
@@ -240,19 +250,27 @@ public class PaintPane extends BorderPane {
 	}
 
 	//Chequeo las figuras seleccionadas y las nombro en el statusPane
-	private void checkingFigureBelongs(Figure mySelectedFigure, StringBuilder label, String elseString) {
+	private boolean checkingSelectedFigure(Figure figure, StringBuilder label) {
 		boolean found = false;
-		for (Figure figure : selectedFigure) {
-			if (figure == mySelectedFigure) {
+		for (Figure figuresSelected : selectedFigure) {
+			if (figuresSelected == figure) {
 				found = true;
-				label.append(figure.toString());
+				label.append(figuresSelected.toString());
 			}
 		}
-		if (found) {
-			statusPane.updateStatus(label.toString());
-		} else {
-			statusPane.updateStatus(elseString);
+		return found;
+	}
+
+	//Chequeo que paso el mouse por una figura del canvas
+	private boolean checkingFigureBelongs(Point eventPoint, StringBuilder label) {
+		boolean found = false;
+		for (Figure figure : canvasState.figures()) {
+			if (figure.figureBelongs(eventPoint) && !(figure instanceof Line)) {
+				label.append(figure.toString());
+				found=true;
+			}
 		}
+		return found;
 	}
 
 	private void redrawCanvas() {
@@ -282,7 +300,7 @@ public class PaintPane extends BorderPane {
 		Alert alert = new Alert(Alert.AlertType.INFORMATION);
 		alert.setTitle("ATENCION");
 		alert.setHeaderText("Error de seleccion");
-		alert.setContentText("La seleccion debe ser dibujada de arriba a abajo y de izquierda a derecha");
+		alert.setContentText("La seleccion debe ser dibujada de arriba a abajo y de izquierda a derecha\n o haciendo click sobre una figura");
 		alert.showAndWait();
 	}
 

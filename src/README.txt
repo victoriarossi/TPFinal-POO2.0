@@ -15,6 +15,7 @@ Pasos a seguir para la una buena implementación:
      forme un rectangulo imaginario el cuale engloba TODA/S la/s figura/s. Si se quiere una seleccionar una unica figura ademas de hacer un rectangulo
      se puede hacer click sobre la misma.
        d.1. Al seleccionar una o mas figuras el borde de las mismas se verá rojo.
+       d.2. Al seleccionar una o mas figuras se vera una breve descripcion de las mismas en la linea debajo de la pantalla
     e. Para deseleccionar la seleccion previa basta con soltar el mouse por fuera de la seleccion o clickear algun boton que genere una nueva figura
      o elimine lo seleccionado.
        e.1. En el caso particular de la figura "Linea" para deseleccionarla y poder elegir una nueva figura es necesario volver a clickear
@@ -22,7 +23,9 @@ Pasos a seguir para la una buena implementación:
     f. Para asignarle un color y un grosor querido, debe primero seleccionar la figura/las figuras y luego indicar los valores queridos.
        El color del borde se vera luego de soltar la seleccion.
     g. Para cambiar el ordenamiento de las figuras (al frente o atras) primero se debe seleccionar las figuras a modificar y luego apretar el
-    boton correspondiente.
+       boton correspondiente.
+    h.Al pasar el mouse por alguna/s figura/s con area(todas las figuras menos la linea) en la linea debajo de la pantalla se mostrara una descripcion
+      de la/s misma/s
 4. Esperamos que el programa sea de su agrado.
 
 Trabajo realizado por:
